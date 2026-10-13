@@ -213,6 +213,33 @@
   .ck .inp .std .src{display:table;margin:4px 0 0;white-space:normal;line-height:1.5}
   .ck .inp .std .tag{display:inline-block;margin-top:4px}
   .ck .why{font-size:12px;color:var(--accent-dk);background:var(--accent-soft);border-radius:5px;padding:6px 9px;margin-top:6px;line-height:1.55}
+  .rvtbl-w{overflow-x:auto}
+  .rvtbl{width:100%;border-collapse:collapse;font-size:13.5px;line-height:1.6;table-layout:fixed;min-width:560px}
+  .rvtbl th{text-align:left;font-size:12.5px;color:var(--ink2);font-weight:700;padding:7px 8px;border-bottom:2px solid var(--line);background:var(--line2)}
+  .rvtbl td{padding:8px;border-bottom:1px solid var(--line2);vertical-align:top}
+  .rvtbl td.bad{color:var(--ember);font-weight:700}
+  .rvtbl tr:nth-child(even) td{background:#FAFCFD}
+  @media print{ .rvtbl tr:nth-child(even) td{background:none} }
+  .fbmeta{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid var(--line2);font-size:13px;color:var(--ink3)}
+  .fbmeta b{font-size:16px;color:var(--ink)}
+  .fbsum{margin-bottom:16px}
+  .fbsum span{display:block;font-size:13px;color:var(--ink3);margin-bottom:2px}
+  .fbsum p{margin:0;font-size:16px;line-height:1.75;font-weight:600;color:var(--ink)}
+  .fbcards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+  .fbc{border-radius:10px;padding:14px 16px;margin:0!important}
+  .fbc h3{display:flex;align-items:center;gap:6px;font-size:15px;margin:0 0 6px;border:0!important;padding:0!important}
+  .fbc p{font-size:13.5px;line-height:1.65;margin:0 0 8px}
+  .fbc ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.6}
+  .fbc li{margin-bottom:3px}
+  .fbc.good{background:#EAF3DE;color:#27500A} .fbc.good h3{color:#27500A}
+  .fbc.fix{background:#FCEBEB;color:#791F1F} .fbc.fix h3{color:#791F1F}
+  .fbc.cfm{background:#FAEEDA;color:#633806} .fbc.cfm h3{color:#633806}
+  .fbi{width:18px;height:18px;flex-shrink:0;background:currentColor;-webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat}
+  .fbc.good .fbi{--m:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 11v9H4v-9zM7 11l4-8a2 2 0 0 1 3 2l-1 5h6a2 2 0 0 1 2 2l-2 7a2 2 0 0 1-2 1H7'/%3E%3C/svg%3E")}
+  .fbc.fix .fbi{--m:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 5a4 4 0 0 0-5 5l-6 6 3 3 6-6a4 4 0 0 0 5-5l-3 3-2.5-.5L12 8z'/%3E%3C/svg%3E")}
+  .fbc.cfm .fbi{--m:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l2 2 3-3M4 13l2 2 3-3M12 7h8M12 14h8M12 20h8M5 20h1'/%3E%3C/svg%3E")}
+  @media(max-width:760px){ .fbcards{grid-template-columns:1fr} }
+  @media print{ .fbcards{grid-template-columns:repeat(3,1fr)} .fbc{break-inside:avoid} }
   .rvtop{display:grid;gap:14px}
   .rvbadge{border-radius:10px;padding:18px 20px;border:1px solid var(--line)}
   .rvbadge .rvb1{font-size:22px;font-weight:700;line-height:1.35}
@@ -463,7 +490,7 @@
   <div class="topbar-in">
     <span>AI로 제작한 참고용 도구입니다. 법령 원문이 우선합니다.</span>
     <button id="tbMore">유의사항 ▾</button>
-    <span class="ver">v261013-badge</span>
+    <span class="ver">v261013-tbl</span>
   </div>
 </div>
 <div class="topdrop" id="tbDrop">
@@ -1738,17 +1765,17 @@ const POOL={
   "남은 기간이 {d}일뿐입니다. 신청 서류를 준비하는 동안에도 검사기관과 일정을 먼저 맞추어 두셔야 기간 안에 검사를 마칠 수 있습니다.",
   "검사기간 종료일({close})까지 {d}일 남았습니다. 신청 기한(검사 희망일 15일 전)을 생각하면 지금 신청하셔도 빠듯할 수 있으니 서둘러 주십시오."],
  tIn:[
-  "지금이 검사기간입니다. 기간은 {open}부터 {close}까지이며 종료까지 {d}일 남았습니다. 아래 보완 사항을 정리하시면서 검사 신청을 함께 진행하시기 바랍니다.",
+  "지금이 검사기간입니다. 기간은 {open}부터 {close}까지이며 종료까지 {d}일 남았습니다. 보완 사항을 정리하시면서 검사 신청을 함께 진행하시기 바랍니다.",
   "검사를 받을 수 있는 기간({open} ~ {close})에 들어와 있습니다. 종료까지 {d}일 남았으니 일정을 여유 있게 잡으시기 바랍니다.",
   "현재 검사기간 중이며 {close}에 기간이 끝납니다. 검사 희망일 15일 전까지 신청해야 한다는 점을 고려해 일정을 정해 주십시오."],
  tSoon:[
   "검사기간은 {open}부터 시작하며 {o}일 남았습니다. 지금이 신청 서류와 현장을 준비하기에 알맞은 시점입니다. 권장 신청일은 {apply}입니다.",
-  "{o}일 뒤({open})부터 검사기간이 시작됩니다. 아래 보완 사항을 먼저 정리하시고, {apply} 무렵 신청하시면 여유가 있습니다.",
+  "{o}일 뒤({open})부터 검사기간이 시작됩니다. 보완 사항을 먼저 정리하시고, {apply} 무렵 신청하시면 여유가 있습니다.",
   "검사기간 시작({open})까지 {o}일 남았습니다. 보완이 필요한 부분이 있다면 지금부터 차근차근 준비하시기를 권합니다."],
  tSoonLate:[
-  "검사기간은 {open}부터 시작하며 {o}일 남았습니다. 권장 신청일({apply})이 이미 지났으니 이번 주 안에 검사기관에 연락해 일정을 잡으시기 바랍니다.",
-  "{o}일 뒤({open})부터 검사기간입니다. 권장 신청 시점은 지났지만 아직 여유는 있으니, 보완 사항을 정리하면서 바로 신청을 진행해 주십시오.",
-  "검사기간 시작({open})까지 {o}일 남았습니다. 신청은 지금 하시는 것이 좋습니다. 늦어질수록 원하는 날짜에 검사를 받기 어려울 수 있습니다."],
+  "검사기간은 {open}부터 시작하며 {o}일 남았습니다. 권장 신청일({apply})은 지났지만 신청 마감까지는 시간이 있으니, 준비 상황에 맞춰 신청하시면 됩니다.",
+  "{o}일 뒤({open})부터 검사기간입니다. 검사기관과 날짜를 맞추실 때 보완 사항을 함께 고려해 일정을 잡으시면 좋겠습니다.",
+  "검사기간 시작({open})까지 {o}일 남았습니다. 원하시는 검사일을 정하신 뒤 그날의 15일 전까지만 신청하시면 됩니다."],
  tFar:[
   "다음 검사기간은 {open}부터 {close}까지이며, 아직 {o}일의 여유가 있습니다. 달력에 권장 신청일({apply})을 미리 표시해 두시면 좋습니다.",
   "검사기간 시작까지 {o}일 남아 일정에는 여유가 있습니다. 이번 점검에서 나온 사항을 미리 보완해 두시면 검사 때 수월합니다.",
@@ -1829,7 +1856,7 @@ const POOL={
   "검사기간이 얼마 남지 않았는데 보완할 항목이 있습니다. 보완과 신청을 동시에 진행하셔야 하며, 기간 안에 보완이 어렵다면 지금 바로 검사기관과 관할 행정청에 상황을 알리고 협의하시기 바랍니다.",
   "시간이 촉박하므로 검사 신청을 먼저 하시고, 보완 사항은 검사일 전까지 마칠 수 있도록 일정을 짜시기 바랍니다. 어려운 부분은 검사기관과 미리 상의하십시오."],
  cOver:[
-  "무엇보다 검사기간이 지난 상태이므로, 보완보다 관할 행정청 문의를 가장 먼저 하셔야 합니다. 그 다음 검사기관에 검사 일정을 요청하시고, 아래 보완 사항을 함께 준비하시기 바랍니다."],
+  "무엇보다 검사기간이 지난 상태이므로, 보완보다 관할 행정청 문의를 가장 먼저 하셔야 합니다. 그 다음 검사기관에 검사 일정을 요청하시고, 보완 사항을 함께 준비하시기 바랍니다."],
  cEmpty:[
   "점검 결과가 입력되면 이 자리에 종합 의견이 작성됩니다."],
  close:[
@@ -1937,99 +1964,25 @@ function advFor(it,pick){
   for(const [re,arr] of ADVICE) if(re.test(key)) return pick(arr);
   return "";
 }
-function buildRev(){
-  const D=revData(), {fx,t,tm}=D;
-  const seed=hashStr(JSON.stringify([CUR,VALS,PROF[CUR]||{},LASTCALC&&LASTCALC.std]))+REV_VAR*7919;
-  const R=rng(seed), pick=a=>a[Math.floor(R()*a.length)];
-  const fill=(s,o)=>s.replace(/\{(\w+)\}/g,(m,k)=>o[k]!==undefined?o[k]:m);
-  const sec=[];
-
-  /* 1. 개요 */
-  const name=VALS.__name||"(시설명 미입력)", date=VALS.__date?dotDate(VALS.__date):"(점검일 미입력)";
-  const live=LDB.db && (LDB.state==="live"||LDB.state==="stale");
-  const laws=live ? (LDB.db.sources||[]).map(x=>x.name.replace("폐기물처리시설의 ","")+" "+dotDate(x.ef)+" 시행").join(", ") : "";
-  sec.push({h:"1. 개요", p:[pick(POOL.intro)],
-    kv:[["시설",name],["시설 종류",fx.name+(D.cond.length?" ("+D.cond.join(", ")+")":"")],["점검일",date]],
-    p2:[fill(pick(POOL.basis),{sheet:CHECK[CUR].sheet}), live?fill(pick(POOL.lawLive),{laws}):pick(POOL.lawNone)]});
-
-  /* 2. 검사 시기 */
-  let tp;
-  if(!tm) tp=pick(POOL.tNone);
-  else{
-    const o={d:Math.abs(tm.dClose),o:tm.dOpen,close:tm.close,open:tm.open,std:tm.std,apply:tm.apply};
-    if(tm.dClose<0) tp=fill(pick(POOL.tOver),o);
-    else if(!tm.win) tp=fill(pick(POOL.tNoWin),o);
-    else if(tm.dClose<=15) tp=fill(pick(POOL.tUrgent),{...o,d:tm.dClose});
-    else if(tm.dOpen<=0) tp=fill(pick(POOL.tIn),{...o,d:tm.dClose});
-    else if(tm.dOpen<=90) tp=fill(pick(tm.applyPassed?POOL.tSoonLate:POOL.tSoon),o);
-    else tp=fill(pick(POOL.tFar),o);
-  }
-  sec.push({h:"2. 검사 시기", p:[tp],
-    kv:tm?[["검사 기준일",tm.std],["검사기간",tm.win?tm.open+" ~ "+tm.close:"검사기관 확인 필요"],["신청 마감",tm.deadline+" (검사 희망일 15일 전 기준)"],["권장 신청일",tm.apply]]:null});
-
-  /* 3. 점검 결과 */
-  const cnt={total:t.total,pass:t.pass,fail:t.fail,miss:t.check,man:t.manual,na:t.note};
-  cnt.parts=[["기준에 맞는 항목",t.pass],["기준에 맞지 않는 항목",t.fail],["아직 입력하지 않은 항목",t.check],["직접 확인이 필요한 항목",t.manual],["해당 없는 항목",t.note]]
-    .filter(x=>x[1]).map(x=>x[0]+" "+x[1]+"개").join(", ");
-  const sp=[];
-  if(!D.entered) sp.push(pick(POOL.sEmpty));
-  else{
-    sp.push(fill(pick(POOL.sCount),cnt));
-    if(t.check>t.total/2) sp.push(fill(pick(POOL.sMostMiss),cnt));
-    else if(!t.fail) sp.push(pick(POOL.sAllOk));
-    else if(t.fail<=2) sp.push(fill(pick(POOL.sFewFail),cnt));
-    else sp.push(fill(pick(POOL.sManyFail),cnt));
-  }
-  sec.push({h:"3. 점검 결과 한눈에 보기", p:sp, stats:cnt});
-
-  /* 4. 보완이 필요한 사항 */
-  if(D.fails.length){
-    const ord=D.fails.slice().sort((a,b)=>(a.t==="num"?0:1)-(b.t==="num"?0:1));
-    sec.push({h:"4. 보완이 필요한 사항", p:["아래 순서대로 보완하시기를 권합니다. 수치 기준에 미달한 항목은 검사 당일 측정에서 그대로 드러나므로 먼저 살펴보시는 것이 좋습니다."],
-      items:ord.map(it=>{ const s=failSentence(it,pick); return {g:it.g, head:s.head, src:s.src, adv:s.adv}; })});
-  }
-
-  /* 5. 확인이 필요한 사항 */
-  const cp=[];
-  if(D.mans.length) cp.push({sub:"직접 확인해 주실 항목", li:D.mans.map(it=>fill(pick(POOL.man),{name:it.n,val:nUnit(VALS[it.id],it.u),why:it.c.why||""}))});
-  if(D.miss.length && D.entered){
-    const gs={}; D.miss.forEach(it=>{ (gs[it.g]=gs[it.g]||[]).push(it.n); });
-    cp.push({sub:"아직 입력하지 않은 항목 ("+D.miss.length+"개)", lead:pick(POOL.missHead),
-      li:Object.entries(gs).map(([g,ns])=>g+": "+ns.join(" / "))});
-  }
-  if(D.chks.length) cp.push({sub:"기준값을 한 번 더 확인할 항목", lead:pick(POOL.chkHead),
-    li:D.chks.map(it=>it.n+" — "+stdText(it).replace(/^기준 /,"")+(it.c.src?" ("+it.c.src+")":""))});
-  if(cp.length) sec.push({h:(D.fails.length?"5":"4")+". 확인이 필요한 사항", blocks:cp});
-
-  /* 결론 */
-  let cc;
-  if(!D.entered) cc=pick(POOL.cEmpty);
-  else if(tm&&tm.dClose<0) cc=pick(POOL.cOver);
-  else if(t.fail && tm && tm.dClose<=15) cc=pick(POOL.cFixUrgent);
-  else if(t.fail) cc=pick(POOL.cFix);
-  else if(t.check) cc=pick(POOL.cReadyMiss);
-  else cc=pick(POOL.cReady);
-  const n=sec.length+1;
-  sec.push({h:n+". 종합 의견", p:[cc, pick(POOL.close)], strong:true});
-
-  /* 용어 풀이 — 의견서에 나온 말만 */
-  const body=JSON.stringify(sec);
-  const g=GLOSS.filter(([k])=>body.includes(k));
-  if(g.length) sec.push({h:(n+1)+". 용어 풀이", gl:g});
-  sec.push({h:"알려 드립니다", p:["이 의견서는 사업장에서 입력하신 값을 바탕으로 이 컴퓨터 안에서 자동 작성되었으며, 검사기관의 공식 판정이 아닙니다. 실제 검사에서는 검사기관이 현장에서 직접 측정해 판정합니다. 법령은 수시로 개정되므로 신청 전 국가법령정보센터의 원문과 관할 행정청·검사기관의 안내를 함께 확인해 주십시오."], note:true});
-  return {sec, D};
-}
-
 /* ---------- 지금 할 일 ---------- */
+function shortName(it){
+  const g=it.g.replace(/^(공통 )?[가-하\d]+[.)]\s*/,"").replace(/^[^\s]+ \d+\)~?\d*\)?\s*/,"");
+  if(it.t==="num") return it.n.length<=14 ? it.n : (it.n.split(/[이가]\s?기준/)[0]||g);
+  return g.length<=16 ? g : it.n.slice(0,14)+"…";
+}
+function shortList(arr){
+  const names=[...new Set(arr.map(shortName))];
+  return names.slice(0,3).join(", ")+(names.length>3?" 외 "+(names.length-3)+"개":"");
+}
 function todo(D){
   const L=[], {t,tm}=D;
   if(!D.entered) return [["사전 모의점검 탭에서 시설 조건을 고르고 점검 항목을 입력합니다.","입력하는 대로 이 화면이 채워집니다."]];
   if(tm&&tm.dClose<0) L.push(["관할 행정청에 바로 문의합니다.","검사기간이 지났습니다. 시·군·구 또는 지방환경청 폐기물 담당부서에 상황을 알려 주십시오."]);
   if(!tm) L.push(["다음 검사 일정을 계산합니다.","사전 모의점검 탭 위쪽 ‘정기검사 시기 확인’에 직전 검사결과서 발급일(처음이면 사용개시일)을 넣어 주십시오."]);
-  if(t.fail) L.push(["부적합 "+t.fail+"개 항목을 보완합니다.","아래 ‘보완이 필요한 사항’에 항목별 조치 방법을 적어 두었습니다."]);
+  if(t.fail) L.push(["부적합 "+t.fail+"개 항목을 보완합니다.", shortList(D.fails)+" — 보완 방법은 아래 의견에 있습니다."]);
   if(t.check) L.push(["남은 "+t.check+"개 항목을 입력합니다.","해당하지 않는 항목은 ‘해당없음’을 고르시면 됩니다."]);
   if(t.manual) L.push(["직접 확인 "+t.manual+"개 항목을 허가조건과 비교합니다.","자동 판정 기준이 없는 항목입니다."]);
-  if(tm&&tm.dClose>=0) L.push(["검사기관에 검사를 신청합니다.","신청 마감은 "+tm.deadline+"입니다(검사 희망일 15일 전). "+(tm.applyPassed?"권장 신청일("+tm.apply+")이 지났으니 되도록 빨리 신청해 주십시오.":"권장 신청일은 "+tm.apply+"입니다.")]);
+  if(tm&&tm.dClose>=0) L.push(["검사기관에 검사를 신청합니다.","신청 마감은 "+tm.deadline+"입니다(검사 희망일 15일 전)."+(tm.applyPassed?"":" 권장 신청일은 "+tm.apply+"입니다.")]);
   L.push(["근거 서류를 모아 둡니다.","운영일지, 측정 기록, 검·교정 성적서, 설계도서, 직전 검사결과서를 한곳에 준비해 주십시오."]);
   return L.slice(0,5);
 }
@@ -2044,15 +1997,99 @@ function verdict(D){
 }
 
 /* ---------- 화면 ---------- */
+/* ---------- 피드백형 의견서: 잘 되어 있는 점 / 보완할 점 / 확인할 점 ---------- */
+const FB={
+ good:[
+  "{pass}개 항목이 기준에 맞습니다. 그동안의 관리가 잘 이루어져 온 것으로 보입니다.",
+  "입력하신 항목 중 {pass}개가 적합으로 나왔습니다. 지금의 관리 상태를 검사 당일까지 유지해 주십시오.",
+  "{pass}개 항목에서 기준을 충족했습니다. 기본적인 운영·관리는 잘 되어 있습니다."],
+ goodAll:[
+  "입력하신 모든 항목이 기준에 맞습니다. 검사 준비가 잘 되어 있습니다.",
+  "부적합 항목이 하나도 없습니다. 평소 관리가 꾸준히 이루어진 결과로 보입니다."],
+ goodNone:["아직 적합으로 확인된 항목이 없습니다. 점검표를 입력하시면 이곳에 정리됩니다."],
+ fix:[
+  "아래 {fail}개 항목은 검사 전에 보완이 필요합니다. 운전 조건이나 관리 상태를 조정하신 뒤 다시 확인해 보십시오.",
+  "{fail}개 항목이 기준에 맞지 않습니다. 보완 후 점검표에 다시 입력하시면 바로 결과를 확인하실 수 있습니다.",
+  "검사 전에 {fail}개 항목을 손보시면 좋겠습니다. 바로 보완하기 어려운 항목은 검사기관과 미리 상의해 주십시오."],
+ fixNone:["보완이 필요한 항목이 없습니다.","기준에 맞지 않는 항목이 없습니다."],
+ check:[
+  "검사 신청 전에 아래 사항을 한 번 확인해 주십시오.",
+  "아래 사항을 확인하시면 더 정확하게 준비하실 수 있습니다.",
+  "놓치기 쉬운 부분을 모았습니다."],
+ head:[
+  "점검 결과를 정리해 드립니다.",
+  "입력하신 점검 결과에 대한 의견입니다.",
+  "입력하신 점검값과 기준을 비교해 정리했습니다."]
+};
+function inlineItem(it){
+  if(it.t!=="num") return it.n+" → 아니오";
+  const x=parseFloat(VALS[it.id]);
+  return (it.n.length<=14?it.n:shortName(it))+" "+nUnit(x,it.u)+" (기준 "+stdText(it).replace(/^기준 /,"").replace(/ · .*/,"")+")";
+}
+function buildRev(){
+  const D=revData(), {fx,t,tm}=D;
+  const seed=hashStr(JSON.stringify([CUR,VALS,PROF[CUR]||{},LASTCALC&&LASTCALC.std]))+REV_VAR*7919;
+  const R=rng(seed), pick=a=>a[Math.floor(R()*a.length)];
+  const fill=(s,o)=>s.replace(/\{(\w+)\}/g,(m,k)=>o[k]!==undefined?o[k]:m);
+  const cnt={total:t.total,pass:t.pass,fail:t.fail};
+  const sec=[];
+  const name=VALS.__name||fx.name, date=VALS.__date?dotDate(VALS.__date):"점검일 미입력";
+  sec.push({meta:[name, fx.name+(D.cond.length?" · "+D.cond.slice(0,3).join(", "):""), date]});
+  if(!D.entered){
+    sec.push({p:["아직 입력된 점검 결과가 없습니다. ‘사전 모의점검’ 탭에서 항목을 입력하시면 의견이 자동으로 작성됩니다."]});
+  } else {
+    /* 한 줄 종합 */
+    let cc;
+    if(tm&&tm.dClose<0) cc=pick(POOL.cOver);
+    else if(t.fail && tm && tm.dClose<=15) cc=pick(POOL.cFixUrgent);
+    else if(t.fail) cc=pick(POOL.cFix);
+    else if(t.check) cc=pick(POOL.cReadyMiss);
+    else cc=pick(POOL.cReady);
+    sec.push({lead:pick(FB.head), sum:cc});
+    const ord=D.fails.slice().sort((a,b)=>(a.t==="num"?0:1)-(b.t==="num"?0:1));
+    /* 핵심: 보완이 필요한 항목과 방법 */
+    if(ord.length) sec.push({h:"보완이 필요한 항목과 방법",p:[fill(pick(FB.fix),cnt)],
+      table:{head:["항목","입력값","기준","보완 방법"],w:["24%","13%","17%","46%"],bad:1,
+        rows:ord.map(it=>[it.n, it.t==="num"?nUnit(parseFloat(VALS[it.id]),it.u):"아니오",
+          it.t==="num"?stdText(it).replace(/^기준 /,""):"예(충족)", advFor(it,pick)+(it.c&&it.c.src?" (근거: "+it.c.src+")":"")])}});
+    else sec.push({h:"보완이 필요한 항목과 방법",p:[pick(FB.fixNone)+" "+(t.pass?(t.check?fill(pick(FB.good),cnt):pick(FB.goodAll)):"")]});
+    /* 일정 */
+    let tp="";
+    if(tm){
+      const o={d:Math.abs(tm.dClose),o:tm.dOpen,close:tm.close,open:tm.open,std:tm.std,apply:tm.apply};
+      if(tm.dClose<0) tp=fill(pick(POOL.tOver),o);
+      else if(!tm.win) tp=fill(pick(POOL.tNoWin),o);
+      else if(tm.dClose<=15) tp=fill(pick(POOL.tUrgent),{...o,d:tm.dClose});
+      else if(tm.dOpen<=0) tp=fill(pick(POOL.tIn),{...o,d:tm.dClose});
+      else if(tm.dOpen<=90) tp=fill(pick(tm.applyPassed?POOL.tSoonLate:POOL.tSoon),o);
+      else tp=fill(pick(POOL.tFar),o);
+      sec.push({h:"검사 일정",p:[tp],kv:[["검사 기준일",tm.std],["검사기간",tm.win?tm.open+" ~ "+tm.close:"검사기관 확인 필요"],["신청 마감",tm.deadline]]});
+    }
+    /* 확인 항목 목록 */
+    const rows=[];
+    D.mans.forEach(it=>rows.push(["직접 확인",it.n,it.c.why||""]));
+    D.miss.forEach(it=>rows.push(["미입력",it.n,it.prep?"검사 때 요청받는 서류":it.g.replace(/^(공통 )?[가-하\d]+[.)]\s*/,"")]));
+    D.chks.forEach(it=>rows.push(["기준 재확인",it.n,stdText(it).replace(/^기준 /,"")+(it.c.src?" ("+it.c.src+")":"")]));
+    if(rows.length) sec.push({h:"확인이 필요한 항목",p:[pick(FB.check)],table:{head:["구분","항목","비고"],w:["15%","45%","40%"],rows}});
+    const body=JSON.stringify(sec);
+    const g=GLOSS.filter(([k])=>body.includes(k)&&k!=="직접 확인"&&k!=="해당없음");
+    if(g.length) sec.push({h:"용어 풀이",gl:g});
+  }
+  sec.push({h:"알려 드립니다", p:["이 의견은 사업장에서 입력하신 값을 바탕으로 이 컴퓨터 안에서 자동 작성되었으며, 검사기관의 공식 판정이 아닙니다. 실제 검사에서는 검사기관이 현장에서 직접 측정해 판정합니다. 법령은 수시로 개정되므로 신청 전 국가법령정보센터의 원문과 관할 행정청·검사기관의 안내를 함께 확인해 주십시오."], note:true});
+  return {sec, D};
+}
 function revHTML(sec){
   return sec.map(s=>{
-    let h='<section class="rv'+(s.note?' rvnote':'')+(s.strong?' rvstrong':'')+'"><h3>'+esc(s.h)+'</h3>';
+    if(s.meta) return '<div class="fbmeta"><b>'+esc(s.meta[0])+'</b><span>'+esc(s.meta[1])+'</span><span>'+esc(s.meta[2])+'</span></div>';
+    if(s.sum) return '<div class="fbsum"><span>'+esc(s.lead)+'</span><p>'+esc(s.sum)+'</p></div>';
+    if(s.cards) return '<div class="fbcards">'+s.cards.map(c=>'<section class="fbc '+c.k+'"><h3><i class="fbi" aria-hidden="true"></i>'+esc(c.h)+'</h3><p>'+esc(c.p)+'</p>'
+        +(c.li&&c.li.length?'<ul>'+c.li.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>':'')+'</section>').join("")+'</div>';
+    let h='<section class="rv'+(s.note?' rvnote':'')+'">'+(s.h?'<h3>'+esc(s.h)+'</h3>':'');
     (s.p||[]).forEach(x=>h+='<p>'+esc(x)+'</p>');
     if(s.kv) h+='<dl class="rvkv">'+s.kv.map(([k,v])=>'<dt>'+esc(k)+'</dt><dd>'+esc(v)+'</dd>').join("")+'</dl>';
-    (s.p2||[]).forEach(x=>h+='<p>'+esc(x)+'</p>');
-    if(s.items) h+='<ol class="rvlist">'+s.items.map(it=>'<li><span class="rvg">'+esc(it.g)+'</span><p><b>'+esc(it.head)+'</b>'
-       +(it.src?' <span class="rvsrc">근거: '+esc(it.src)+'</span>':'')+'</p>'+(it.adv?'<p class="rvadv">→ '+esc(it.adv)+'</p>':'')+'</li>').join("")+'</ol>';
-    (s.blocks||[]).forEach(b=>{ h+='<h4>'+esc(b.sub)+'</h4>'+(b.lead?'<p>'+esc(b.lead)+'</p>':'')+'<ul>'+b.li.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>'; });
+    if(s.table){ const T=s.table;
+      h+='<div class="rvtbl-w"><table class="rvtbl"><colgroup>'+T.w.map(w=>'<col style="width:'+w+'">').join("")+'</colgroup><thead><tr>'+T.head.map(x=>'<th>'+esc(x)+'</th>').join("")+'</tr></thead><tbody>'
+        + T.rows.map(r=>'<tr>'+r.map((c,i)=>'<td'+(T.bad===i?' class="bad"':'')+'>'+esc(c)+'</td>').join("")+'</tr>').join("")+'</tbody></table></div>'; }
     if(s.gl) h+='<dl class="rvgl">'+s.gl.map(([k,v])=>'<dt>'+esc(k)+'</dt><dd>'+esc(v)+'</dd>').join("")+'</dl>';
     return h+'</section>';
   }).join("");
@@ -2068,11 +2105,11 @@ function renderRev(){
      + '<div><b>'+t.pass+'</b><span>적합</span></div><div class="f"><b>'+t.fail+'</b><span>부적합</span></div>'
      + '<div class="m"><b>'+t.check+'</b><span>미입력</span></div><div><b>'+(t.manual+t.note)+'</b><span>직접확인·해당없음</span></div></div>'
    + '<h3>지금 할 일</h3><ol class="rvtodo">'+td.map(([a,b])=>'<li><b>'+esc(a)+'</b><span>'+esc(b)+'</span></li>').join("")+'</ol></div>'
-   + '<div class="card"><div class="rvhead"><h2>검사 준비 의견서</h2>'
+   + '<div class="card"><div class="rvhead"><h2>검사 준비 의견</h2>'
    + '<div class="rvbtns"><button class="btn ghost sm" id="rvAgain">다른 표현으로 다시 쓰기</button>'
    + '<button class="btn ghost sm" id="rvCopy">복사</button><button class="btn ghost sm" id="rvSave">텍스트 저장</button>'
    + '<button class="btn ghost sm" id="rvPrint">인쇄</button></div></div>'
-   + '<p class="lede">사업장 담당자께 드리는 안내문입니다. 문장을 눌러 바로 고칠 수 있으며, 고친 내용은 복사·저장·인쇄에 그대로 반영됩니다. 점검값을 바꾸면 의견서가 새로 작성됩니다.</p>'
+   + '<p class="lede">사업장 담당자께 드리는 의견입니다. 문장을 눌러 바로 고칠 수 있으며, 고친 내용은 복사·저장·인쇄에 그대로 반영됩니다. 점검값을 바꾸면 의견이 새로 작성됩니다.</p>'
    + '<article id="rvdoc" class="rvdoc" contenteditable="true" spellcheck="false">'+revHTML(sec)+'</article>'
    + '</div>';
   REV_EDITED=false;
@@ -2083,7 +2120,7 @@ function renderRev(){
       ()=>{ $("rvCopy").textContent="복사 실패"; setTimeout(()=>$("rvCopy").textContent="복사",1600); });
   $("rvSave").onclick=()=>{
     const blob=new Blob(["\ufeff"+revText()],{type:"text/plain;charset=utf-8"}), a=document.createElement("a");
-    a.href=URL.createObjectURL(blob); a.download="검사준비의견서_"+(VALS.__name||f().name)+"_"+(VALS.__date||"")+".txt"; a.click(); URL.revokeObjectURL(a.href);
+    a.href=URL.createObjectURL(blob); a.download="검사준비의견_"+(VALS.__name||f().name)+"_"+(VALS.__date||"")+".txt"; a.click(); URL.revokeObjectURL(a.href);
   };
   helpify($("p-rev")); colorHeads($("p-rev"));
   $("rvPrint").onclick=()=>{ document.body.classList.add("prt-rev"); window.print(); setTimeout(()=>document.body.classList.remove("prt-rev"),500); };
