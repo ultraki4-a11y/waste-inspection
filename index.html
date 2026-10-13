@@ -376,6 +376,11 @@
   .fl-who text{font-size:13px;fill:#33505F}
   .fl-svg.wide .fl-who text{font-size:14px}
   .fl-who .lb{font-weight:700;fill:#00849E}
+  .fl-card{position:relative}
+  .fl-tip{position:absolute;right:22px;top:24px;font-size:12.5px;color:var(--ink2);background:var(--line2);border-radius:999px;padding:3px 11px}
+  .fl-tip::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#4F9A2A;margin-right:6px;vertical-align:1px}
+  @media(max-width:640px){ .fl-tip{position:static;display:inline-block;margin:0 0 6px} }
+  .fl-detail[hidden]{display:none}
   .fl-detail{margin-top:6px;background:var(--accent-soft);border-radius:10px;padding:12px 16px;font-size:14px;min-height:46px;line-height:1.65}
   .fl-detail b{color:var(--accent-dk);margin-right:4px}
   .fl-detail .src{margin-left:8px}
@@ -490,7 +495,7 @@
   <div class="topbar-in">
     <span>AI로 제작한 참고용 도구입니다. 법령 원문이 우선합니다.</span>
     <button id="tbMore">유의사항 ▾</button>
-    <span class="ver">v261013-tbl</span>
+    <span class="ver">v261013-noexp</span>
   </div>
 </div>
 <div class="topdrop" id="tbDrop">
@@ -1584,9 +1589,6 @@ function renderSelf(){
    + '<div><label class="f" for="fname">시설명</label><input class="f" id="fname" placeholder="○○ 처리시설 1호기"></div>'
    + '<div><label class="f" for="cdate">점검일</label><input class="f" id="cdate" type="date"></div></div>'
    + '<div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">'
-   + '<button class="btn ghost sm" id="ckExp">내보내기</button>'
-   + '<button class="btn ghost sm" id="ckImpBtn">가져오기</button>'
-   + '<input type="file" id="ckImp" accept=".json" style="display:none">'
    + '<button class="btn ghost sm" id="ckClear">입력 지우기</button>'
    + '<span id="ckMsg" style="display:none;color:var(--accent);font-size:13px"></span></div></div>'
    + '<div id="summary"></div><div id="sheet"></div>';
@@ -1611,31 +1613,6 @@ function renderSelf(){
   if(VALS.__date) $("cdate").value=VALS.__date;
   $("fname").onchange=()=>{ VALS.__name=$("fname").value; saveState(); };
   $("cdate").onchange=()=>{ VALS.__date=$("cdate").value; saveState(); };
-  $("ckExp").onclick=()=>{
-    const p={format:"wf-check-v3", facility:f().name, cur:CUR, prof:prof(), name:VALS.__name||"", date:VALS.__date||"", vals:VALS,
-      result:ITEMS.map(it=>({group:it.g, item:it.n, value:VALS[it.id]===undefined?"":VALS[it.id], std:stdText(it), verdict:judge(it).s}))};
-    const blob=new Blob([JSON.stringify(p,null,1)],{type:"application/json"});
-    const a=document.createElement("a");
-    a.href=URL.createObjectURL(blob); a.download="사전모의점검_"+f().name+"_"+(VALS.__date||"")+".json"; a.click();
-    URL.revokeObjectURL(a.href);
-  };
-  $("ckImpBtn").onclick=()=>$("ckImp").click();
-  $("ckImp").onchange=e=>{
-    const fl=e.target.files[0]; if(!fl) return;
-    const r=new FileReader();
-    r.onload=()=>{
-      try{
-        const v=JSON.parse(r.result);
-        if(v.format!=="wf-check-v3"||!v.vals) throw new Error("형식 불일치");
-        if(v.cur&&FAC[v.cur]){ CUR=v.cur; $("fac").value=CUR; }
-        if(v.prof) PROF[CUR]=v.prof;
-        VALS=v.vals;
-        saveState(); renderAll(); flash("불러왔습니다.");
-      }catch(err){ flash("가져오지 못했습니다."); }
-      e.target.value="";
-    };
-    r.readAsText(fl);
-  };
   $("ckClear").onclick=()=>{ VALS={}; saveState(); renderSheet(); renderSum(); };
   renderSheet(); renderSum();
 }
@@ -2378,12 +2355,12 @@ function flowSVG(fx, tall){
 }
 function flowCard(fx){
   const br=(ic,t,d,cls)=>'<div class="fl-br '+(cls||'')+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+ICON[ic]+'" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>'+t+'</b><span>'+d+'</span></div></div>';
-  return '<div class="card"><h2>검사 흐름</h2>'
+  return '<div class="card fl-card"><h2>검사 흐름</h2><span class="fl-tip">동그라미를 누르면 설명이 나옵니다</span>'
    + '<div class="fl-wrap">'+flowSVG(fx,false)+flowSVG(fx,true)+'</div>'
-   + '<div class="fl-detail" id="flDetail"><span class="fl-hint">동그라미를 누르면 설명이 나옵니다.</span></div>'
+   + '<div class="fl-detail" id="flDetail" hidden></div>'
    + '<div class="fl-brs">'
    + br("wrench","시설을 바꾸면","일부 변경은 검사를 다시 받습니다")
-   + br("search","기술진단을 받으면","검사기간 안이면 정기검사로 인정")
+   + br("search","기술진단을 받으면","종료일이 있는 해는 정기검사로 인정")
    + br("warn","검사를 놓치면","행정처분 대상이 됩니다","bad")
    + '</div></div>';
 }
@@ -2392,7 +2369,7 @@ function bindFlow(root){
   const show=k=>{
     const n=FLOW_NODES.find(x=>x.k===k); if(!n) return;
     root.querySelectorAll(".fl-node").forEach(g=>g.classList.toggle("on",g.dataset.k===k));
-    box.innerHTML='<b>'+esc(n.t)+'</b> '+esc(n.d)+(n.src?'<span class="src">'+esc(n.src)+'</span>':'');
+    box.hidden=false; box.innerHTML='<b>'+esc(n.t)+'</b> '+esc(n.d)+(n.src?'<span class="src">'+esc(n.src)+'</span>':'');
   };
   root.querySelectorAll(".fl-node").forEach(g=>{
     g.addEventListener("click",()=>show(g.dataset.k));
