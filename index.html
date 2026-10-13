@@ -257,6 +257,126 @@
   .rvfoot{font-size:12px;color:var(--ink3);margin-top:10px}
   @media(max-width:640px){ .rvstats{grid-template-columns:repeat(2,1fr)} .rvdoc{padding:16px} .rvkv,.rvgl{grid-template-columns:1fr} }
   @media print{ body.prt-rev section.pane:not(#p-rev){display:none!important} body.prt-rev .rvtop,body.prt-rev .rvbtns,body.prt-rev .lede,body.prt-rev .rvfoot,body.prt-rev .topbar,body.prt-rev footer{display:none!important} body.prt-rev .rvdoc{border:0;padding:0} }
+  html[data-tone="a"]{--accent:#1F5F99;--accent-soft:#E3EDF6;--accent-dk:#174A78;--accent-ln:#AFC8E0}
+  nav button[data-tone="a"][aria-current="true"]{border-bottom-color:#1F5F99;color:#1F5F99;font-weight:700}
+  .folded{display:none!important}
+  .qbtn{appearance:none;border:1px solid var(--line);background:#fff;color:var(--ink3);width:22px;height:22px;border-radius:50%;font:inherit;font-size:12px;font-weight:700;line-height:1;margin-left:8px;vertical-align:3px;cursor:pointer;padding:0}
+  .qbtn:hover,.qbtn[aria-expanded="true"]{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+  .qbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .dbst{border-top:1px solid var(--line2);margin-top:14px;padding-top:11px;font-size:13px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .dbst .dot{width:8px;height:8px;border-radius:50%;background:var(--ink3)}
+  .dbst.ok .dot{background:#4F9A2A} .dbst.bad .dot{background:var(--ember)}
+  .dbst.ok b{color:#3B7A1C} .dbst.bad{color:var(--ink2)} .dbst.bad b{color:var(--ember)}
+  .dbsrc summary{cursor:pointer;color:var(--ink3);font-size:12.5px}
+  .dbsrc[open]{flex-basis:100%;order:3;font-size:12.5px;color:var(--ink2);line-height:1.7}
+  .dbsrc .when{color:var(--ink3)}
+  .hm-hero{margin:22px 0 4px}
+  .hm-hero h2{font-size:24px;margin:0 0 6px;letter-spacing:-.4px;color:var(--ink)}
+  .hm-hero p{margin:0;font-size:15px;color:var(--ink2)}
+  .hm-flow{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+  .hm-step{position:relative;background:var(--accent-soft);border:1px solid var(--accent-ln);border-radius:10px;padding:14px 12px 12px}
+  .hm-step:not(:last-child)::after{content:"";position:absolute;right:-12px;top:26px;border:6px solid transparent;border-left:7px solid var(--accent);z-index:1}
+  .hm-step:nth-child(5){background:#ECF5E1;border-color:#BEDCA0}
+  .hm-n{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;font-size:13px;display:grid;place-items:center}
+  .hm-step:nth-child(5) .hm-n{background:#4F9A2A}
+  .hm-t{font-weight:700;font-size:15px;margin:8px 0 4px}
+  .hm-d{font-size:13px;line-height:1.55;color:var(--ink)}
+  .hm-tag{font-size:11px;color:var(--ink3);margin-top:6px}
+  .hm-loop{margin-top:12px;background:#ECF5E1;border:1px dashed #9CC97A;border-radius:10px;padding:10px 14px;font-size:14px}
+  .hm-loop-ic{font-size:18px;color:#4F9A2A;margin-right:4px;vertical-align:-2px}
+  .hm-branch{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+  .hm-branch div{border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.6}
+  .hm-branch b{display:block;font-size:14px;margin-bottom:3px;color:var(--accent-dk)}
+  .hm-branch div:last-child b{color:var(--ember)}
+  .hm-cyc{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px}
+  .hm-cyc div{border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .hm-cyc span{display:block;font-size:12.5px;color:var(--ink3)}
+  .hm-cyc b{font-size:18px;color:var(--accent-dk)}
+  .hm-cyc em{display:block;font-style:normal;font-size:12.5px;color:#3B7A1C;margin-top:2px}
+  .hm-tl{width:100%;height:46px;display:block}
+  .hm-tl-lb{position:relative;height:42px;font-size:12px;line-height:1.35}
+  .hm-tl-lb span{position:absolute;transform:translateX(-50%);text-align:center;white-space:nowrap;color:var(--ink2)}
+  .hm-tl-lb b{display:block;font-size:13px;color:var(--ink)}
+  .hm-tl-lb .t1 b{color:#0072BC} .hm-tl-lb .t2 b{color:#00849E} .hm-tl-lb .t3 b{color:#3B7A1C}
+  .hm-tl-lb.top{margin-top:14px} .hm-tl-lb.top span{bottom:0}
+  .hm-tl-none{background:var(--amber-soft);border-radius:10px;padding:12px 14px;font-size:14px}
+  .hm-cap{font-size:13px;color:var(--ink2);margin:10px 0 0}
+  .hm-pick{padding-top:16px;padding-bottom:16px}
+  .hm-pick h2{font-size:16px;margin-bottom:10px}
+  .hm-pick h2 small{font-size:12.5px;font-weight:400;color:var(--ink3);margin-left:8px}
+  .hm-facs{display:flex;flex-wrap:wrap;gap:8px}
+  .hm-fac{appearance:none;font:inherit;border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 12px;cursor:pointer;display:inline-flex;align-items:baseline;gap:8px}
+  .hm-fac .nm{font-weight:700;font-size:14px}
+  .hm-fac .cy{font-size:12.5px;color:var(--accent-dk)}
+  .hm-fac.on .cy{color:var(--accent-dk);font-weight:600}
+  .hm-fac:hover{border-color:var(--accent)}
+  .hm-fac:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .hm-fac.on{border-color:var(--accent);background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent)}
+  .hm-use{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;counter-reset:u}
+  .hm-use li{counter-increment:u;border:1px solid var(--line);border-radius:10px;padding:14px;cursor:pointer;position:relative}
+  .hm-use li::before{content:counter(u);position:absolute;right:12px;top:10px;font-size:22px;font-weight:700;color:var(--accent-ln)}
+  .hm-use li:hover{border-color:var(--accent);background:var(--accent-soft)}
+  .hm-use b{display:block;font-size:15px;margin-bottom:3px}
+  .hm-use span{font-size:13px;color:var(--ink2)}
+  .hm-notice{margin-top:18px;border:1px solid var(--line);border-radius:10px;background:#fff;padding:12px 16px;font-size:13.5px}
+  .hm-notice summary{cursor:pointer;font-weight:700;color:var(--ink2)}
+  .hm-notice ul{margin:8px 0 0;padding-left:20px;color:var(--ink2);line-height:1.75}
+  @media(max-width:760px){ .hm-flow{grid-template-columns:1fr} .hm-step:not(:last-child)::after{right:auto;left:24px;top:auto;bottom:-13px;border:6px solid transparent;border-top:7px solid var(--accent)} .hm-branch,.hm-use,.hm-cyc{grid-template-columns:1fr} .hm-tl-lb{font-size:11px} .hm-tl-lb b{font-size:12px} }
+  .fl-wrap{margin:4px 0 0}
+  .fl-svg{width:100%;height:auto;display:block}
+  .fl-svg.tall{display:none;max-width:380px;margin:0 auto}
+  .fl-node{cursor:pointer;outline:none}
+  .fl-node circle{fill:#E2F0F9;stroke:#0072BC;stroke-width:2.5;transition:fill .15s}
+  .fl-node path{stroke:#0072BC}
+  .fl-node.cyc circle{fill:#fff;stroke:#4F9A2A}
+  .fl-node.cyc path{stroke:#3B7A1C}
+  .fl-node:hover circle,.fl-node:focus-visible circle{fill:#CDE6F6}
+  .fl-node.cyc:hover circle,.fl-node.cyc:focus-visible circle{fill:#E1F0D2}
+  .fl-node.on circle{fill:#0072BC} .fl-node.on path{stroke:#fff}
+  .fl-node.cyc.on circle{fill:#4F9A2A}
+  .fl-node:focus-visible circle{stroke-width:4}
+  .fl-t{font-size:16px;font-weight:700;fill:#1C2830}
+  .fl-b{font-size:13px;font-weight:600;fill:#00849E}
+  .fl-cyc{font-size:26px;font-weight:800;fill:#3B7A1C}
+  .fl-cyc2{font-size:14px;fill:#4F9A2A}
+  .fl-detail{margin-top:10px;background:var(--accent-soft);border-radius:10px;padding:12px 16px;font-size:14px;min-height:46px;line-height:1.65}
+  .fl-detail b{color:var(--accent-dk);margin-right:4px}
+  .fl-detail .src{margin-left:8px}
+  .fl-hint{color:var(--ink3);font-size:13px}
+  .fl-brs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+  .fl-br{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .fl-br svg{width:30px;height:30px;flex-shrink:0;stroke:#0072BC;background:#E2F0F9;border-radius:50%;padding:5px}
+  .fl-br.bad svg{stroke:var(--ember);background:var(--ember-soft)}
+  .fl-br b{display:block;font-size:14px}
+  .fl-br span{font-size:12.5px;color:var(--ink2)}
+  @media(max-width:640px){ .fl-svg.wide{display:none} .fl-svg.tall{display:block} .fl-brs{grid-template-columns:1fr} }
+  /* 탭 — 사각 버튼, 모바일은 아래 고정 탭바 */
+  nav{gap:8px!important;margin-top:14px!important;padding-bottom:12px}
+  nav button{display:inline-flex!important;align-items:center;gap:7px;border:1px solid var(--line)!important;border-radius:8px!important;
+    background:#fff!important;padding:10px 18px 10px 14px!important;font-size:14.5px!important;font-weight:600!important;color:var(--ink2)!important;transition:background .15s,border-color .15s}
+  nav button svg{width:19px;height:19px;flex-shrink:0}
+  nav button:hover{border-color:var(--tc)!important;color:var(--tc)!important;background:var(--ts)!important}
+  nav button[data-tone="a"]{--tc:#1F5F99;--ts:#E3EDF6} nav button[data-tone="b"]{--tc:#0072BC;--ts:#E2F0F9}
+  nav button[data-tone="c"]{--tc:#4F9A2A;--ts:#ECF5E1} nav button[data-tone="d"]{--tc:#00849E;--ts:#E0F2F6}
+  nav button[aria-current="true"]{background:var(--tc)!important;border-color:var(--tc)!important;color:#fff!important;box-shadow:0 2px 6px color-mix(in srgb,var(--tc) 35%,transparent)}
+  nav button[data-tone="a"]{margin-right:14px;position:relative}
+  nav button[data-tone="a"]::after{content:"";position:absolute;right:-12px;top:20%;height:60%;width:1px;background:var(--line)}
+  nav button[data-tone="a"]:hover{background:linear-gradient(100deg,#ECF5E1,#E2F0F9)!important;border-color:#7FB2D6!important;color:#1F5F99!important}
+  nav button[data-tone="a"][aria-current="true"]{background:linear-gradient(100deg,#5FA830 0%,#2E8BB0 55%,#0072BC 100%)!important;border-color:transparent!important;color:#fff!important;box-shadow:0 2px 8px rgba(0,114,188,.3)}
+  .hm-hero h2{display:inline-block;background:linear-gradient(100deg,#3B7A1C,#0072BC);-webkit-background-clip:text;background-clip:text;color:transparent}
+  @media(max-width:640px){
+    nav{position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0!important;padding:6px 6px calc(6px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line);
+      display:grid!important;grid-template-columns:repeat(4,1fr);gap:2px!important;box-shadow:0 -2px 10px rgba(0,40,70,.06)}
+    nav button{flex-direction:column;gap:3px;border:0!important;border-radius:10px!important;padding:7px 2px!important;font-size:11.5px!important;background:none!important;justify-content:center}
+    nav button svg{width:22px;height:22px}
+    nav button span{white-space:nowrap}
+    nav button[aria-current="true"]{background:var(--ts)!important;color:var(--tc)!important;box-shadow:none}
+    nav button[data-tone="a"]{margin-right:0} nav button[data-tone="a"]::after{display:none}
+    nav button[data-tone="a"][aria-current="true"]{background:linear-gradient(100deg,#ECF5E1,#E2F0F9)!important;color:#1F5F99!important;box-shadow:none}
+    .head-in{padding-bottom:12px}
+    body{padding-bottom:76px}
+    .prt{bottom:84px!important}
+  }
   .prof{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
   .edrow{display:grid;grid-template-columns:76px 1fr 1fr;gap:6px;margin-top:6px}
   .edrow select,.edrow input{border:1px solid var(--line);border-radius:5px;padding:5px 7px;font:inherit;font-size:12.5px;background:#fff}
@@ -323,9 +443,9 @@
 
 <div class="topbar">
   <div class="topbar-in">
-    <span>⚠ <b>이 도구는 AI를 활용해 제작했습니다.</b> 법령 원문을 반드시 함께 확인하십시오.</span>
-    <button id="tbMore">유의사항 자세히 ▾</button>
-    <span class="ver">v261013-color</span>
+    <span>AI로 제작한 참고용 도구입니다. 법령 원문이 우선합니다.</span>
+    <button id="tbMore">유의사항 ▾</button>
+    <span class="ver">v261013-pick</span>
   </div>
 </div>
 <div class="topdrop" id="tbDrop">
@@ -352,15 +472,17 @@
       </div>
     </div>
     <nav id="nav">
-      <button data-p="ai" data-tone="b" aria-current="true">법령 안내·검색</button>
-      <button data-p="self" data-tone="c">사전 모의점검</button>
-      <button data-p="rev" data-tone="d">종합 의견</button>
+      <button data-p="home" data-tone="a" aria-current="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7M5 9.5V20h14V9.5M10 20v-5h4v5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg><span>검사 한눈에</span></button>
+      <button data-p="ai" data-tone="b" aria-current="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h5a3 3 0 0 1 3 3v12a2.5 2.5 0 0 0-2.5-2.5H4zM20 5h-5a3 3 0 0 0-3 3v12a2.5 2.5 0 0 1 2.5-2.5H20z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg><span>법령 안내·검색</span></button>
+      <button data-p="self" data-tone="c" aria-current="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6v3H9zM7 4.5H5V21h14V4.5h-2M8.5 13l2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg><span>사전 모의점검</span></button>
+      <button data-p="rev" data-tone="d" aria-current="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg><span>종합 의견</span></button>
     </nav>
   </div>
 </header>
 
 <div class="wrap">
-  <section class="pane on" id="p-ai"></section>
+  <section class="pane on" id="p-home"></section>
+  <section class="pane" id="p-ai"></section>
   <section class="pane" id="p-self"></section>
   <section class="pane" id="p-rev"></section>
   <footer>
@@ -1403,17 +1525,16 @@ function renderSelf(){
    + '<div style="margin-top:14px"><button class="btn" id="run">계산</button>'
    + '<button class="btn ghost sm" id="today" style="margin-left:6px">오늘 날짜</button></div>'
    + '<div id="out"></div>'
-   + '<div class="note warn" style="margin-top:16px"><b>“최종 정기검사일”은 검사결과서를 발급받은 날입니다.</b>'
-   + '<span class="src">시행규칙 제41조제5항·제8항</span> 실제 검사일과 다를 수 있으니 결과서 날짜로 계산하십시오.</div>'
+   + '<div class="note warn" style="margin-top:16px">2회 이후는 실제 검사일이 아니라 <b>검사결과서 발급일</b>을 넣으십시오.</div>'
    + (fx.cyc.win===0?'<div class="note alert"><b>이 시설은 “기준일 전후 30일” 규정이 적용되지 않습니다.</b> '
        + '시행규칙 제41조제5항 본문 단서에 따라 제3호의 기간을 적용합니다. 허용 구간 운용은 검사기관에 반드시 확인하십시오.</div>':'')
    + '</div>'
 
    + '<div class="card"><h2>사전 모의점검</h2>'
    + '<p class="lede">「폐기물처리시설의 검사방법에 관한 규정」 '+esc(CHECK[CUR].sheet)+'의 정기검사 항목입니다. 예·아니오·해당없음을 고르거나 측정값만 넣으면 바로 판정됩니다. 입력값은 이 컴퓨터에만 저장됩니다.</p>'
-   + '<div class="note warn">이 판정은 검사 준비를 위한 자가 점검입니다. 최종 적합 여부는 검사기관의 현장 측정과 판정에 따릅니다. '
+   + '<div class="note warn hint">이 판정은 검사 준비를 위한 자가 점검입니다. 최종 적합 여부는 검사기관의 현장 측정과 판정에 따릅니다. '
    + '<b>“현행 원문 대조 필요”</b> 표시가 붙은 기준은 시행규칙 별표 9·11의 현행본과 한 번 더 맞춰 보십시오.</div>'
-   + (PROFILE[CUR].length?'<h3>시설 조건</h3><p class="lede" style="margin-bottom:10px">조건에 따라 점검항목과 기준값이 자동으로 바뀝니다.</p><div class="prof" id="prof"></div>':'')
+   + (PROFILE[CUR].length?'<h3>시설 조건</h3><div class="prof" id="prof"></div>':'')
    + '<div class="calc" style="margin-top:14px">'
    + '<div><label class="f" for="fname">시설명</label><input class="f" id="fname" placeholder="○○ 처리시설 1호기"></div>'
    + '<div><label class="f" for="cdate">점검일</label><input class="f" id="cdate" type="date"></div></div>'
@@ -1935,7 +2056,7 @@ function renderRev(){
    + '<button class="btn ghost sm" id="rvPrint">인쇄</button></div></div>'
    + '<p class="lede">사업장 담당자께 드리는 안내문입니다. 문장을 눌러 바로 고칠 수 있으며, 고친 내용은 복사·저장·인쇄에 그대로 반영됩니다. 점검값을 바꾸면 의견서가 새로 작성됩니다.</p>'
    + '<article id="rvdoc" class="rvdoc" contenteditable="true" spellcheck="false">'+revHTML(sec)+'</article>'
-   + '<p class="rvfoot">이 의견서는 사용하시는 컴퓨터 안에서만 만들어지며 외부로 전송되지 않습니다.</p></div>';
+   + '</div>';
   REV_EDITED=false;
   $("rvdoc").addEventListener("input",()=>{ REV_EDITED=true; });
   $("rvAgain").onclick=()=>{ if(REV_EDITED && !confirm("직접 고치신 내용이 사라집니다. 다시 쓸까요?")) return; REV_VAR++; renderRev(); };
@@ -1946,6 +2067,7 @@ function renderRev(){
     const blob=new Blob(["\ufeff"+revText()],{type:"text/plain;charset=utf-8"}), a=document.createElement("a");
     a.href=URL.createObjectURL(blob); a.download="검사준비의견서_"+(VALS.__name||f().name)+"_"+(VALS.__date||"")+".txt"; a.click(); URL.revokeObjectURL(a.href);
   };
+  helpify($("p-rev"));
   $("rvPrint").onclick=()=>{ document.body.classList.add("prt-rev"); window.print(); setTimeout(()=>document.body.classList.remove("prt-rev"),500); };
 }
 
@@ -2096,15 +2218,15 @@ function snip(text, query, n=300){
 }
 function dbStatus(){
   const db=LDB.db;
-  if(LDB.state==="loading") return '<div class="dbst"><span class="spin"></span><span id="dbprog">국가법령정보센터에서 현행 법령을 받는 중입니다…</span></div>';
+  if(LDB.state==="loading") return '<div class="dbst"><span class="spin"></span><span id="dbprog">현행 법령을 받는 중입니다…</span></div>';
   if(!db) return "";
-  const src=(db.sources||[]).map(x=>esc(x.name)+' <span class="tag dt">시행 '+esc(x.ef)+'</span>').join(" ");
   if(LDB.state==="live"||LDB.state==="stale")
-    return '<div class="dbst ok"><b>국가법령정보센터 현행본으로 찾습니다.</b> '+src
-      + '<span class="when">'+esc(db.built||"")+' 받음'+(LDB.state==="stale"?' · 오늘 갱신 실패, 이전 저장본 사용':'')+'</span>'
+    return '<div class="dbst ok"><span class="dot"></span><b>현행 법령으로 찾습니다</b>'
+      + '<details class="dbsrc"><summary>시행일 보기</summary>'+(db.sources||[]).map(x=>'<div>'+esc(x.name)+' — '+esc(x.ef)+' 시행</div>').join("")
+      + '<div class="when">'+esc(db.built||"")+' 받음'+(LDB.state==="stale"?' · 오늘 갱신 실패, 이전 저장본 사용':'')+'</div></details>'
       + '<button class="lk" id="dbre">새로 받기</button></div>';
-  return '<div class="dbst bad"><b>국가법령정보센터에 연결하지 못했습니다.</b> 내장된 안내·주요 조문과 세부검사방법 별표 수록본으로만 찾습니다.'
-    + (LDB.err?'<span class="when">'+esc(LDB.err)+'</span>':'')+'<button class="lk" id="dbre">다시 시도</button></div>';
+  return '<div class="dbst bad" title="'+esc(LDB.err||"")+'"><span class="dot"></span><b>현행 법령 연결 안 됨</b> 내장 자료로 찾습니다'
+    + '<button class="lk" id="dbre">다시 시도</button></div>';
 }
 function paintStatus(){
   const b=$("dbst"); if(!b) return;
@@ -2118,10 +2240,181 @@ function refreshLawDb(force){
     .catch(e=>{ LDB.err=e.message; LDB.state="snap"; paintStatus(); });
 }
 
+/* ==========================================================
+   첫 화면 — 검사 한눈에 보기 (그림으로 보는 검사 흐름)
+   ========================================================== */
+/* ---------- 검사 흐름 그림 ---------- */
+const ICON={
+ build:"M3 21h18M5 21V9l7-5 7 5v12M9 21v-5h6v5M9 12h1M14 12h1",
+ doc:"M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h4",
+ shield:"M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6zM9 12l2 2 4-4",
+ gear:"M12 9a3 3 0 1 0 0 6a3 3 0 1 0 0-6zM12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9L7 7M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1",
+ cal:"M4 6h16v14H4zM4 10h16M8 3v4M16 3v4M8 14h4",
+ clip:"M9 3h6v3H9zM7 4.5H5V21h14V4.5h-2M8.5 13l2.5 2.5 4.5-5",
+ cert:"M6 3h12v13H6zM9 7h6M9 10h6M10 16l-1 5 3-2 3 2-1-5",
+ wrench:"M15 5a4 4 0 0 0-5 5l-6 6 3 3 6-6a4 4 0 0 0 5-5l-3 3-2.5-.5L12 8z",
+ search:"M10 4a6 6 0 1 1 0 12a6 6 0 1 1 0-12zM15 15l5 5",
+ warn:"M12 3l10 18H2zM12 10v5M12 18v.5"
+};
+const FLOW_NODES=[
+ {k:"n1",ic:"build",t:"설치 완료",b:"",d:"폐기물처리시설 설치를 마치면, 시설을 쓰기 전에 사용개시 신고와 설치검사를 거쳐야 합니다."},
+ {k:"n2",ic:"doc",t:"사용개시 신고",b:"사용개시 10일 전",d:"사용개시일 10일 전까지 사용개시신고서를 시·도지사 또는 지방환경관서의 장에게 제출합니다.",src:"시행규칙 제41조제1항"},
+ {k:"n3",ic:"shield",t:"설치검사",b:"적합해야 사용",d:"검사기관에서 설치기준에 맞는지 검사받습니다. 적합 판정을 받지 않은 시설은 사용할 수 없습니다.",src:"법 제30조제1항"},
+ {k:"c1",ic:"gear",t:"운영·관리",b:"",d:"관리기준(시행규칙 별표 11)을 지키며 운영하고 운영일지·측정 기록을 남깁니다. 이 기록이 정기검사 때 근거가 됩니다.",src:"시행규칙 별표 11"},
+ {k:"c2",ic:"cal",t:"검사 신청",b:"검사일 15일 전",d:"검사를 받으려는 날 15일 전까지 검사신청서를 검사기관에 제출합니다.",src:"시행규칙 제41조제7항"},
+ {k:"c3",ic:"clip",t:"정기검사",b:"기준일 ±30일",d:"정해진 검사기간(대부분 기준일 전후 30일) 안에 검사를 받습니다. 이 기간 안에 같은 시설의 기술진단을 받으면 정기검사를 받은 것으로 봅니다.",src:"법 제30조제2항 · 시행규칙 제41조제5항"},
+ {k:"c4",ic:"cert",t:"결과서 발급",b:"",d:"검사결과서를 받은 날이 ‘최종 정기검사일’이 되고, 이날부터 다음 주기를 셉니다.",src:"시행규칙 제41조제5항"}
+];
+function flowSVG(fx, tall){
+  const P=tall
+    ? {n1:[90,50],n2:[90,170],n3:[90,290],cx:150,cy:520,R:100,W:400,H:660,m:.7}
+    : {n1:[80,175],n2:[250,175],n3:[420,175],cx:690,cy:175,R:115,RY:95,W:950,H:345,m:.6};
+  const RX=P.R, RY=P.RY||P.R, r=34, id=tall?'t':'w';
+  P.c1=tall?[P.cx,P.cy-RY]:[P.cx-RX,P.cy]; P.c2=tall?[P.cx+RX,P.cy]:[P.cx,P.cy-RY];
+  P.c3=tall?[P.cx,P.cy+RY]:[P.cx+RX,P.cy]; P.c4=tall?[P.cx-RX,P.cy]:[P.cx,P.cy+RY];
+  // 이름표 위치 [x, y, 정렬] — 화살표와 겹치지 않도록 바깥쪽에
+  const L=tall
+    ? {n1:[r+14,5,"start"],n2:[r+14,0,"start"],n3:[r+14,0,"start"],c1:[r+12,-6,"start"],c2:[r+12,-4,"start"],c3:[r+12,8,"start"],c4:[0,r+22,"middle"]}
+    : {n1:[0,r+24,"middle"],n2:[0,r+24,"middle"],n3:[0,r+24,"middle"],c1:[-r-8,-r+6,"end"],c2:[0,-r-26,"middle"],c3:[r+12,-4,"start"],c4:[0,r+24,"middle"]};
+  let s='<svg class="fl-svg '+(tall?'tall':'wide')+'" viewBox="0 0 '+P.W+' '+P.H+'" role="img" aria-label="검사 흐름 그림">'
+   + '<defs><marker id="ab'+id+'" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5E95BF"/></marker>'
+   + '<marker id="ag'+id+'" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#4F9A2A"/></marker></defs>';
+  s+='<ellipse cx="'+P.cx+'" cy="'+P.cy+'" rx="'+RX+'" ry="'+RY+'" fill="#F3F9EC" stroke="#D6EAC3" stroke-width="1.5"/>';
+  const ang=a=>[P.cx+RX*Math.cos(a), P.cy+RY*Math.sin(a)];
+  const arcs=tall?[[-Math.PI/2,0],[0,Math.PI/2],[Math.PI/2,Math.PI],[Math.PI,1.5*Math.PI]]
+                 :[[Math.PI,1.5*Math.PI],[1.5*Math.PI,2*Math.PI],[0,Math.PI/2],[Math.PI/2,Math.PI]];
+  arcs.forEach(([a,b])=>{ const A=ang(a+P.m), B=ang(b-P.m);
+    s+='<path d="M'+A[0].toFixed(1)+' '+A[1].toFixed(1)+' A'+RX+' '+RY+' 0 0 1 '+B[0].toFixed(1)+' '+B[1].toFixed(1)+'" fill="none" stroke="#4F9A2A" stroke-width="3" marker-end="url(#ag'+id+')"/>'; });
+  const same=fx.cyc.first[0]===fx.cyc.next[0]&&fx.cyc.first[1]===fx.cyc.next[1];
+  s+='<text x="'+P.cx+'" y="'+(P.cy-4)+'" text-anchor="middle" class="fl-cyc">'+esc(uTxt(fx.cyc.next))+'마다</text>'
+   + '<text x="'+P.cx+'" y="'+(P.cy+20)+'" text-anchor="middle" class="fl-cyc2">'+(same?"반복":"최초는 "+esc(uTxt(fx.cyc.first)))+'</text>';
+  const line=(a,b)=>{ const [x1,y1]=P[a],[x2,y2]=P[b], dx=x2-x1, dy=y2-y1, D=Math.hypot(dx,dy), ux=dx/D, uy=dy/D;
+    s+='<line x1="'+(x1+ux*(r+6)).toFixed(1)+'" y1="'+(y1+uy*(r+6)).toFixed(1)+'" x2="'+(x2-ux*(r+9)).toFixed(1)+'" y2="'+(y2-uy*(r+9)).toFixed(1)+'" stroke="#5E95BF" stroke-width="3" marker-end="url(#ab'+id+')"/>'; };
+  line("n1","n2"); line("n2","n3"); line("n3","c1");
+  FLOW_NODES.forEach(n=>{
+    const [x,y]=P[n.k], l=L[n.k], tx=x+l[0], ty=y+l[1];
+    s+='<g class="fl-node'+(n.k[0]==="c"?' cyc':'')+'" data-k="'+n.k+'" tabindex="0" role="button" aria-label="'+esc(n.t)+' 설명 보기">'
+     + '<circle cx="'+x+'" cy="'+y+'" r="'+r+'"/>'
+     + '<g transform="translate('+(x-14)+' '+(y-14)+') scale(1.17)"><path d="'+ICON[n.ic]+'" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>'
+     + '<text x="'+tx+'" y="'+ty+'" text-anchor="'+l[2]+'" class="fl-t">'+esc(n.t)+'</text>'
+     + (n.b?'<text x="'+tx+'" y="'+(ty+18)+'" text-anchor="'+l[2]+'" class="fl-b">'+esc(n.b)+'</text>':'')
+     + '</g>';
+  });
+  return s+'</svg>';
+}
+function flowCard(fx){
+  const br=(ic,t,d,cls)=>'<div class="fl-br '+(cls||'')+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+ICON[ic]+'" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>'+t+'</b><span>'+d+'</span></div></div>';
+  return '<div class="card"><h2>검사 흐름</h2>'
+   + '<div class="fl-wrap">'+flowSVG(fx,false)+flowSVG(fx,true)+'</div>'
+   + '<div class="fl-detail" id="flDetail"><span class="fl-hint">동그라미를 누르면 설명이 나옵니다.</span></div>'
+   + '<div class="fl-brs">'
+   + br("wrench","시설을 바꾸면","일부 변경은 검사를 다시 받습니다")
+   + br("search","기술진단을 받으면","검사기간 안이면 정기검사로 인정")
+   + br("warn","검사를 놓치면","행정처분 대상이 됩니다","bad")
+   + '</div></div>';
+}
+function bindFlow(root){
+  const box=root.querySelector("#flDetail"); if(!box) return;
+  const show=k=>{
+    const n=FLOW_NODES.find(x=>x.k===k); if(!n) return;
+    root.querySelectorAll(".fl-node").forEach(g=>g.classList.toggle("on",g.dataset.k===k));
+    box.innerHTML='<b>'+esc(n.t)+'</b> '+esc(n.d)+(n.src?'<span class="src">'+esc(n.src)+'</span>':'');
+  };
+  root.querySelectorAll(".fl-node").forEach(g=>{
+    g.addEventListener("click",()=>show(g.dataset.k));
+    g.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); show(g.dataset.k); } });
+  });
+}
+
+const FAC_ORDER=["incin","heat","pyro","cement","sterile","food","landfill"];
+function cycTxt(c){ return {f:uTxt(c.first), n:uTxt(c.next)}; }
+function homeTimeline(fx){
+  const c=fx.cyc, win=c.win;
+  if(!win) return '<div class="hm-tl-none"><b>'+esc(fx.name)+'</b>은 다른 시설과 달리 ‘기준일 전후 30일’ 규정이 적용되지 않습니다. '
+    + '최초 사용개시일부터 '+uTxt(c.first)+', 이후 직전 검사결과서 발급일부터 '+uTxt(c.next)+'마다 받으며, 허용 기간은 검사기관에 확인하십시오.</div>';
+  // 0~100 축: 기준일 -60일 ~ +40일
+  const X=d=>((d+60)/100*100).toFixed(2);
+  return '<div class="hm-tl-lb top">'
+    + '<span style="left:'+X(-45)+'%" class="t2"><b>권장 신청</b>기준일 45일 전</span>'
+    + '<span style="left:'+X(0)+'%" class="t1"><b>기준일</b>직전 결과서 발급일 + '+uTxt(c.next)+'</span>'
+    + '</div>'
+    + '<svg class="hm-tl" viewBox="0 0 100 34" preserveAspectRatio="none" role="img" aria-label="검사기간 그림: 기준일 전후 30일이 검사기간이며, 기준일 45일 전 신청을 권장합니다">'
+    + '<rect x="0" y="15" width="100" height="4" rx="2" fill="#D5E1E7"/>'
+    + '<rect x="'+X(-30)+'" y="12" width="'+(60)+'" height="10" rx="3" fill="#8DC63F" opacity=".85"/>'
+    + '<line x1="'+X(0)+'" x2="'+X(0)+'" y1="8" y2="26" stroke="#0072BC" stroke-width=".8"/>'
+    + '<line x1="'+X(-45)+'" x2="'+X(-45)+'" y1="10" y2="24" stroke="#00849E" stroke-width=".6" stroke-dasharray="1 .8"/>'
+    + '</svg>'
+    + '<div class="hm-tl-lb bot">'
+    + '<span style="left:'+X(-30)+'%" class="t3"><b>검사기간 시작</b>기준일 30일 전</span>'
+    + '<span style="left:'+X(30)+'%" class="t3"><b>검사기간 끝</b>기준일 30일 후</span>'
+    + '</div>';
+}
+function renderHome(){
+  const fx=f(), cy=cycTxt(fx.cyc);
+  const step=(n,t,d,tag)=>'<li class="hm-step"><div class="hm-n">'+n+'</div><div class="hm-t">'+t+'</div><div class="hm-d">'+d+'</div>'+(tag?'<div class="hm-tag">'+tag+'</div>':'')+'</li>';
+  $("p-home").innerHTML =
+   '<div class="hm-hero"><h2>폐기물처리시설 검사, 이렇게 진행됩니다</h2>'
+   + '<p>시설을 설치하면 한 번 <b>설치검사</b>를 받고, 그 뒤로는 정해진 주기마다 <b>정기검사</b>를 받습니다. 지금 보고 계신 시설은 <b>'+esc(fx.name)+'</b>입니다.</p></div>'
+
+   + flowCard(fx)
+
+   /* 2. 내 시설 고르기 (시설별 주기) */
+   + '<div class="card hm-pick"><h2>내 시설 고르기 <small>누르면 아래 검사기간이 바뀝니다</small></h2>'
+   + '<div class="hm-facs">'+FAC_ORDER.map(k=>{ const F=FAC[k], c=cycTxt(F.cyc), same=c.f===c.n;
+       return '<button class="hm-fac'+(k===CUR?' on':'')+'" data-k="'+k+'" title="세부검사방법 '+esc(F.sheet)+'" aria-pressed="'+(k===CUR)+'">'
+         + '<span class="nm">'+esc(F.name)+'</span><span class="cy">'+(same?c.n+'마다':'최초 '+c.f+' · 이후 '+c.n)+'</span></button>'; }).join("")
+   + '</div></div>'
+
+   /* 3. 검사기간 그림 */
+   + '<div class="card" id="hmWhen"><h2>'+esc(fx.name)+' 정기검사는 언제 받나요?</h2>'
+   + '<div class="hm-cyc"><div><span>최초 정기검사</span><b>사용개시일부터 '+cy.f+'</b>'+(fx.cyc.tms?'<em>굴뚝자동측정기기 관제센터 연결 시 5년</em>':'')+'</div>'
+   + '<div><span>2회 이후</span><b>직전 결과서 발급일부터 '+cy.n+'</b></div></div>'
+   + homeTimeline(fx)
+   + '<p class="hm-cap">초록색 구간이 검사를 받아야 하는 <b>검사기간</b>입니다. 정확한 날짜는 ‘사전 모의점검’ 탭에서 계산할 수 있습니다.</p></div>'
+
+   /* 4. 도구 사용 순서 */
+   + '<div class="card"><h2>이 도구는 이렇게 쓰세요</h2><ol class="hm-use">'
+   + '<li data-go="ai"><b>법령 확인</b><span>궁금한 기준·절차를 법령에서 바로 찾습니다.</span></li>'
+   + '<li data-go="self"><b>사전 모의점검</b><span>검사 일정을 계산하고 항목을 입력하면 바로 판정됩니다.</span></li>'
+   + '<li data-go="rev"><b>종합 의견</b><span>점검 결과를 의견서로 정리해 복사·인쇄합니다.</span></li>'
+   + '</ol></div>'
+
+   /* 5. 유의사항 */
+   + '<details class="hm-notice"><summary>이용 전 알아두실 점</summary><ul>'
+   + '<li>이 도구는 AI를 활용해 제작한 참고용 자료이며, 검사기관의 공식 판정이 아닙니다.</li>'
+   + '<li>법령은 수시로 개정됩니다. 도구의 내용과 국가법령정보센터 원문이 다르면 원문이 우선합니다.</li>'
+   + '<li>모의점검 기준은 「검사방법에 관한 규정」 별표 1~7과 시행규칙 별표 9·11에서 옮겼습니다. “현행 원문 대조 필요” 표시가 있는 기준은 개정 여부를 확인하십시오.</li>'
+   + '<li>검사 시기·절차의 최종 판단은 관할 행정청과 검사기관의 회신에 따릅니다.</li>'
+   + '<li>입력하신 날짜·점검값·의견서는 이 기기에만 저장되며 외부로 전송되지 않습니다.</li>'
+   + '</ul></details>';
+
+  bindFlow($("p-home"));
+  $("p-home").querySelectorAll(".hm-fac").forEach(b=>b.onclick=()=>{
+    CUR=b.dataset.k; $("fac").value=CUR; SUB=""; LASTCALC=null; saveState(); renderAll();
+    const w=$("hmWhen"); if(w) w.scrollIntoView({behavior:"smooth",block:"start"}); });
+  $("p-home").querySelectorAll("[data-go]").forEach(li=>li.onclick=()=>goTab(li.dataset.go));
+}
+function goTab(p){ const b=$("nav").querySelector('button[data-p="'+p+'"]'); if(b) b.click(); }
+
+/* 설명 문단을 접어 두고 ‘?’로 펼치기 */
+function helpify(root){
+  root.querySelectorAll(".card").forEach(card=>{
+    const h=card.querySelector(":scope > h2, :scope > .rvhead > h2"); if(!h) return;
+    const hs=[...card.querySelectorAll(":scope > p.lede, :scope > .hint")];
+    if(!hs.length || h.querySelector(".qbtn")) return;
+    hs.forEach(x=>x.classList.add("folded"));
+    const b=document.createElement("button");
+    b.className="qbtn"; b.type="button"; b.textContent="?"; b.title="설명 보기"; b.setAttribute("aria-expanded","false");
+    b.onclick=()=>{ const on=b.getAttribute("aria-expanded")!=="true"; b.setAttribute("aria-expanded",on); hs.forEach(x=>x.classList.toggle("folded",!on)); };
+    h.appendChild(b);
+  });
+}
+
 function renderAll(){
   ITEMS=buildItems();
   IDX=null;
-  renderAI(); renderSelf(); renderRev();
+  renderHome(); renderAI(); renderSelf(); renderRev();
+  helpify($("p-ai")); helpify($("p-self"));
 }
 $("fac").onchange=()=>{ CUR=$("fac").value; SUB=""; LASTCALC=null; saveState(); renderAll(); };
 $("nav").querySelectorAll("button").forEach(b=>{
@@ -2136,7 +2429,7 @@ $("nav").querySelectorAll("button").forEach(b=>{
   };
 });
 $("print").onclick=()=>window.print();
-document.documentElement.dataset.tone="b";
+document.documentElement.dataset.tone="a";
 
 loadState();
 facOpts();
@@ -2148,7 +2441,7 @@ renderAll();
   var b=document.getElementById("tbMore"), d=document.getElementById("tbDrop");
   if(b&&d) b.onclick=function(){
     d.classList.toggle("on");
-    b.textContent = d.classList.contains("on") ? "유의사항 접기 ▴" : "유의사항 자세히 ▾";
+    b.textContent = d.classList.contains("on") ? "유의사항 ▴" : "유의사항 ▾";
   };
   if("serviceWorker" in navigator && location.protocol.indexOf("http")===0){
     window.addEventListener("load", function(){

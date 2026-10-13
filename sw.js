@@ -1,4 +1,4 @@
-const VERSION = "v261013-color";
+const VERSION = "v261013-pick";
 const CACHE = "wf-inspect-" + VERSION;
 const ASSETS = ["./", "./index.html", "./manifest.webmanifest",
   "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
