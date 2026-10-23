@@ -427,6 +427,11 @@
   .hm-pick > h2{margin-bottom:12px}
   .hm-pick .hm-sub{font-size:12.5px;color:var(--ink3);margin-left:8px}
   .card > h2 + .qbtn{vertical-align:6px}
+  .odbox{border:1px dashed var(--line);border-radius:10px;padding:12px 14px;font-size:13.5px;color:var(--ink2);background:#fff}
+  .odlist{display:grid;gap:8px}
+  .oditem{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:#fff}
+  .oditem b{display:block;font-size:14.5px}
+  .oditem span{font-size:12.5px;color:var(--ink3)}
   .prof{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
   .edrow{display:grid;grid-template-columns:76px 1fr 1fr;gap:6px;margin-top:6px}
   .edrow select,.edrow input{border:1px solid var(--line);border-radius:5px;padding:5px 7px;font:inherit;font-size:12.5px;background:#fff}
@@ -495,7 +500,7 @@
   <div class="topbar-in">
     <span>AI로 제작한 참고용 도구입니다. 법령 원문이 우선합니다.</span>
     <button id="tbMore">유의사항 ▾</button>
-    <span class="ver">v261013-noexp</span>
+    <span class="ver">v261020-laws30</span>
   </div>
 </div>
 <div class="topdrop" id="tbDrop">
@@ -1342,7 +1347,7 @@ function renderAI(){
    + '<div class="oneline"><b>검사 대상</b> — '+fx.target+'<span class="src">'+esc(fx.targetSrc)+'</span></div>'
    + '<div class="card"><h2>법령 안내·검색</h2>'
    + '<p class="lede">'+esc(fx.name)+' 기준으로 찾습니다. 질문을 그대로 쓰셔도 되고, “시행규칙 제41조”, “별표 11 출구온도”처럼 조문을 지목하셔도 됩니다. '
-   + '폐기물관리법·시행령·시행규칙(별표 포함)과 검사방법 규정은 국가법령정보센터의 현행본을 받아 검색합니다.</p>'
+   + '검사·진단에 자주 쓰는 핵심 법령 '+CORE.length+'건은 현행본을 미리 받아 두고, 그 밖의 기후에너지환경부 소관 법령은 검색할 때 찾아옵니다.</p>'
    + '<div class="qrow"><input id="q" type="text" placeholder="정기검사는 언제까지 신청해야 하나요?" autocomplete="off">'
    + '<button class="btn" id="go">찾기</button></div>'
    + '<div class="chips" id="chips"></div>'
@@ -1354,7 +1359,7 @@ function renderAI(){
   $("q").addEventListener("keydown",e=>{ if(e.key==="Enter") doAsk(); });
   if(LASTQ) $("q").value=LASTQ;
   paintStatus();
-  if(!LDB.db && !LDB.loading) refreshLawDb(false);
+  if(!LDB.db && !LDB.loading) refreshLawDb("auto");
   runSearch(LASTQ||"");
 }
 function doAsk(){
@@ -1362,7 +1367,7 @@ function doAsk(){
   if(q){ QLOG.push({q, at:new Date().toISOString().slice(0,10)}); saveState(); }
   runSearch(q);
 }
-const liveOn=()=>LDB.state==="live"||LDB.state==="stale";
+const liveOn=()=>!!(LDB.db&&LDB.db.live);
 function guideCard(L, i, query){
   const body = L.html && !query ? L.html
     : (L.html ? '<div style="line-height:1.75">'+hl(L.txt,query)+'</div>'
@@ -1383,7 +1388,7 @@ function lawCard(d, query, open){
     + '<div class="lawtx" data-full="0">'+hl(sn.s,query)+'</div>'
     + (sn.cut?'<button class="more" data-d="'+d.i+'">전체 보기</button>':'')
     + '<div class="rft"><span class="tag kind">'+esc(d.kind)+'</span>'
-    + (d.snap?'<span class="tag chk2">원문 PDF 수록본</span>':'<span class="tag dt">현행 · 시행 '+esc(d.ef||"")+'</span>')
+    + (d.snap?'<span class="tag chk2">원문 PDF 수록본</span>':'<span class="tag dt">현행 · 시행 '+esc(d.ef||"")+'</span>'+(d.od?'<span class="tag kind">검색으로 받은 법령</span>':''))
     + '<a class="lk" href="'+lawLink(d)+'" target="_blank" rel="noopener">law.go.kr에서 열기</a>'
     + '<button class="cpy" data-d="'+d.i+'">인용문 복사</button></div></div></details>';
 }
@@ -1405,8 +1410,10 @@ function runSearch(q){
     else if(LDB.state==="loading") h+='<div class="empty"><b>현행 법령을 받는 중입니다.</b>받기가 끝나면 결과가 자동으로 채워집니다.</div>';
     else h+='<div class="empty"><b>일치하는 조문이 없습니다.</b>다른 표현으로 찾아보시거나 조문 번호로 지목해 보십시오.</div>';
   }
+  if(q) h+='<div id="odsec"></div>';
   $("ans").innerHTML=h;
   const A=$("ans");
+  if(q) paintOD(q);
   const copy=(b,text)=>navigator.clipboard.writeText(text).then(
       ()=>{ b.textContent="복사됨"; setTimeout(()=>b.textContent="인용문 복사",1600); },
       ()=>{ b.textContent="복사 실패"; setTimeout(()=>b.textContent="인용문 복사",1600); });
@@ -1419,6 +1426,16 @@ function runSearch(q){
     box.innerHTML=on?hl(snip(d.text,q).s,q):hl(d.text,q); box.dataset.full=on?"0":"1"; b.textContent=on?"전체 보기":"접기"; });
 }
 
+function paintOD(q){
+  const box=$("odsec"); if(!box) return;
+  const bind=()=>box.querySelectorAll("[data-od]").forEach(b=>b.onclick=async e=>{ e.preventDefault();
+    b.disabled=true; b.textContent="받는 중…";
+    try{ await odFetch(b.dataset.od); runSearch(LASTQ); }catch(err){ b.disabled=false; b.textContent="다시 시도"; b.title=err.message; } });
+  if(OD.q===q && !OD.busy && OD.list!==null){ box.innerHTML=odHTML(); bind(); return; }
+  box.innerHTML=odHTML();
+  if(OD.busy && OD.q===q) return;
+  odSearch(q).then(()=>{ if(LASTQ===q){ const b2=$("odsec"); if(b2){ b2.innerHTML=odHTML(); bind(); } } });
+}
 /* ----------------------------------------------------------
    국가법령정보 OPEN API — 현행 원문 실시간 조회
    실패하면 위 수록본만 보이고 기능은 그대로 동작합니다.
@@ -2109,7 +2126,7 @@ const BYUL=[{"no":1,"title":"폐기물소각시설의 세부검사방법","chunk
    1) 브라우저 저장본(하루) → 2) 법령 OPEN API로 새로 구성 → 3) 오래된 저장본 순으로 시도
    세부검사방법 별표 1~7은 API가 첨부파일로만 주므로 원문 PDF에서 옮긴 수록본을 항상 함께 씁니다.
    ========================================================== */
-const LDB={db:null, idx:null, loading:null, err:"", state:"idle"};
+const LDB={db:null, idx:null, loading:null, err:"", state:"idle", meta:null, syncing:false, prog:""};
 const BYUL_DOCS=(()=>{ const out=[];
   BYUL.forEach(b=>{
     const tot={}, seen={}; b.chunks.forEach(c=>tot[c[0]]=(tot[c[0]]||0)+1);
@@ -2118,10 +2135,45 @@ const BYUL_DOCS=(()=>{ const out=[];
         cite:"검사방법 규정 [별표 "+b.no+"] "+(c[0]||"")+(tot[c[0]]>1?" ("+k+"/"+tot[c[0]]+")":""),title:b.title,ef:"",snap:true,text:c[1]}); });
   });
   return out; })();
-/* ---- 법령 DB: 브라우저 저장본(하루) → 법령 API로 새로 구성 → 정적 파일(data/laws.json) 순으로 시도 ---- */
-const DB_VER=2, DB_TTL=24*3600*1000;
-const DB_LAWS=["001771","005353","008567"];           // 폐기물관리법 · 시행령 · 시행규칙 (법령ID)
-const DB_ADMRULS=["폐기물처리시설의 검사방법에 관한 규정"];
+/* ---- 법령 DB v3 ------------------------------------------------------------
+   ① 핵심 법령(CORE)은 미리 받아 브라우저에 저장
+   ② 하루 한 번 목록만 조회해 시행본(일련번호)이 바뀐 법령만 다시 받기
+   ③ 그 밖의 기후에너지환경부 소관 법령·행정규칙은 검색할 때 찾아서 받기
+   -------------------------------------------------------------------------- */
+const DB_VER=3, LIST_TTL=24*3600*1000;
+const CORE=[
+ // 폐기물
+ {n:"폐기물관리법",k:"law"},{n:"폐기물관리법 시행령",k:"law"},{n:"폐기물관리법 시행규칙",k:"law"},
+ // 기술진단
+ {n:"환경기술 및 환경산업 지원법",k:"law"},{n:"환경기술 및 환경산업 지원법 시행령",k:"law"},{n:"환경기술 및 환경산업 지원법 시행규칙",k:"law"},
+ // 재활용
+ {n:"순환경제사회 전환 촉진법",k:"law"},{n:"순환경제사회 전환 촉진법 시행령",k:"law"},{n:"순환경제사회 전환 촉진법 시행규칙",k:"law"},
+ // 배출기준
+ {n:"대기환경보전법",k:"law"},{n:"대기환경보전법 시행규칙",k:"law"},
+ {n:"물환경보전법",k:"law"},{n:"물환경보전법 시행규칙",k:"law"},
+ {n:"악취방지법",k:"law"},{n:"악취방지법 시행규칙",k:"law"},
+ {n:"소음·진동관리법",k:"law"},{n:"소음·진동관리법 시행규칙",k:"law"},
+ {n:"잔류성오염물질 관리법",k:"law",a:["잔류성유기오염물질 관리법"]},{n:"잔류성오염물질 관리법 시행규칙",k:"law",a:["잔류성유기오염물질 관리법 시행규칙"]},
+ // 시험·측정
+ {n:"환경분야 시험·검사 등에 관한 법률",k:"law"},
+ // 처리시설 관련
+ {n:"폐기물처리시설 설치촉진 및 주변지역지원 등에 관한 법률",k:"law"},
+ {n:"건설폐기물의 재활용촉진에 관한 법률",k:"law"},
+ {n:"환경오염시설의 통합관리에 관한 법률",k:"law"},
+ {n:"가축분뇨의 관리 및 이용에 관한 법률",k:"law"},
+ {n:"하수도법",k:"law"},
+ // 행정규칙(고시)
+ {n:"폐기물처리시설의 검사방법에 관한 규정",k:"admrul"},
+ {n:"폐기물공정시험기준",k:"admrul"},
+ {n:"에너지회수효율 측정·산정 방법 및 절차 등에 관한 고시",k:"admrul",q:"에너지회수효율",fz:true},
+ {n:"폐기물매립시설 상부를 덮는 시설물 등의 설치 및 관리기준 고시",k:"admrul",q:"매립시설 상부",fz:true},
+ {n:"영상정보처리기기의 설치·운영 등에 관한 고시",k:"admrul",q:"영상정보처리기기",fz:true,must:"폐기물"}
+];
+const MINISTRY=/기후에너지환경부|환경부/;
+const nrm = s => String(s||"").replace(/[\s·ㆍ・\u00b7]/g,"");
+const coreKey = c => c.k+":"+nrm(c.n);
+const CORE_NAMES=new Set(CORE.flatMap(c=>[c.n].concat(c.a||[])).map(nrm));
+
 function idbOpen(){ return new Promise((ok,no)=>{ const r=indexedDB.open("wf-lawdb",1);
   r.onupgradeneeded=()=>r.result.createObjectStore("kv"); r.onsuccess=()=>ok(r.result); r.onerror=()=>no(r.error); }); }
 async function idbGet(k){ try{ const d=await idbOpen(); return await new Promise(ok=>{ const q=d.transaction("kv").objectStore("kv").get(k); q.onsuccess=()=>ok(q.result); q.onerror=()=>ok(null); }); }catch(e){ return null; } }
@@ -2136,62 +2188,81 @@ function lawArticleText(u){
     arr(h.호).forEach(x=>{ out.push("  "+flat(x.호내용)); arr(x.목).forEach(m=>out.push("    "+flat(m.목내용))); }); });
   return out.filter(s=>s&&s.trim()).join("\n").trim();
 }
-async function buildLawDbLive(progress){
-  const docs=[], sources=[];
-  for(const id of DB_LAWS){
-    progress("법령 받는 중 ("+(sources.length+1)+"/"+(DB_LAWS.length+DB_ADMRULS.length)+")…");
-    const law=(await lawGet({q:"target=law&ID="+id},false)).법령||{}, info=law.기본정보||{}, name=info.법령명_한글||"", ef=ymd(info.시행일자);
-    sources.push({kind:"법령",name,id,ef,prom:ymd(info.공포일자)});
+const nowStamp=()=>{ const d=new Date(), p=n=>String(n).padStart(2,"0");
+  return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+" "+p(d.getHours())+":"+p(d.getMinutes()); };
+
+/* 목록 검색 결과 한 건을 같은 모양으로 */
+function listItems(j,k){
+  const raw=k==="law" ? arr((j.LawSearch||{}).law) : arr((j.AdmRulSearch||{}).admrul);
+  return raw.map(x=>k==="law"
+    ? {k, name:x.법령명한글||x.법령명||"", sn:String(x.법령일련번호||x.MST||""), id:String(x.법령ID||""), ef:ymd(String(x.시행일자||"")),
+       org:x.소관부처명||"", type:x.법령구분명||"법령"}
+    : {k, name:x.행정규칙명||"", sn:String(x.행정규칙일련번호||""), id:String(x.행정규칙ID||""), ef:ymd(String(x.시행일자||"")),
+       org:x.소관부처명||"", type:x.행정규칙종류||"행정규칙"}).filter(x=>x.name&&x.sn);
+}
+async function listSearch(k,query,body){
+  const q="target="+k+"&display=50"+(body?"&search=2":"")+"&query="+encodeURIComponent(query);
+  return listItems(await lawGet({svc:"lawSearch.do",q},false),k);
+}
+/* 핵심 법령 한 건의 현행 시행본 찾기 */
+async function resolveCore(c){
+  const hits=await listSearch(c.k,c.q||c.n,false);
+  const want=[c.n].concat(c.a||[]).map(nrm);
+  let h=hits.find(x=>want.includes(nrm(x.name)));
+  if(!h && c.fz) h=hits.find(x=>nrm(x.name).includes(nrm(c.q||c.n)) && (!c.must||x.name.includes(c.must)));
+  return h||null;
+}
+/* 본문 받아 검색용 조각으로 */
+async function fetchDocSet(item){
+  const out={k:item.k,name:item.name,sn:item.sn,ef:item.ef,org:item.org||"",built:nowStamp(),docs:[]};
+  if(item.k==="law"){
+    const law=(await lawGet({q:"target=law&MST="+item.sn},false)).법령||{}, info=law.기본정보||{};
+    const name=info.법령명_한글||item.name, ef=ymd(info.시행일자)||item.ef, lid=String(info.법령ID||item.id||"");
+    out.name=name; out.ef=ef;
     arr((law.조문||{}).조문단위).forEach(u=>{
       if(u.조문여부!=="조문") return;
       const jo=+u.조문번호||0, gaji=+(u.조문가지번호||0), text=lawArticleText(u);
       if(!text || /^\s*제\d+조(의\d+)?\s*삭제/.test(text)) return;
-      docs.push({t:"law",law:name,lid:id,kind:"조문",jo,gaji,cite:name+" 제"+jo+"조"+(gaji?"의"+gaji:""),
-                 title:flat(u.조문제목),ef:ymd(u.조문시행일자)||ef,text});
+      out.docs.push({t:"law",law:name,lid,kind:"조문",jo,gaji,cite:name+" 제"+jo+"조"+(gaji?"의"+gaji:""),
+        title:flat(u.조문제목),ef:ymd(u.조문시행일자)||ef,text});
     });
     arr((law.별표||{}).별표단위).forEach(b=>{
       if((flat(b.별표구분)||"별표")!=="별표") return;
       const no=+b.별표번호||0, bg=+(b.별표가지번호||0), label="[별표 "+no+(bg?"의"+bg:"")+"]";
       const parts=chunkLines(flat(b.별표내용).split("\n").map(s=>s.trimEnd()).filter(s=>s.trim()),1800);
-      parts.forEach((p,i)=>docs.push({t:"law-byul",law:name,lid:id,kind:"별표",byul:no,
+      parts.forEach((p,i)=>out.docs.push({t:"law-byul",law:name,lid,kind:"별표",byul:no,
         cite:name+" "+label+(parts.length>1?" ("+(i+1)+"/"+parts.length+")":""),title:flat(b.별표제목),ef,text:p}));
     });
-  }
-  for(const nm of DB_ADMRULS){
-    progress("행정규칙 받는 중 ("+(sources.length+1)+"/"+(DB_LAWS.length+DB_ADMRULS.length)+")…");
-    const s=await lawGet({svc:"lawSearch.do",q:"target=admrul&display=20&query="+encodeURIComponent(nm)},false);
-    const hit=arr((s.AdmRulSearch||{}).admrul).find(x=>x.행정규칙명===nm);
-    if(!hit) continue;
-    const r=(await lawGet({q:"target=admrul&ID="+hit.행정규칙일련번호},false)).AdmRulService||{}, info=r.행정규칙기본정보||{}, ef=ymd(info.시행일자);
-    sources.push({kind:"행정규칙",name:nm,id:info.행정규칙ID,ef,prom:ymd(info.발령일자)});
+  } else {
+    const r=(await lawGet({q:"target=admrul&ID="+item.sn},false)).AdmRulService||{}, info=r.행정규칙기본정보||{};
+    const nm=info.행정규칙명||item.name, ef=ymd(info.시행일자)||item.ef;
+    out.name=nm; out.ef=ef;
     arr(r.조문내용).forEach(t=>{
       t=flat(t).trim(); const m=t.match(/^제(\d+)조(?:의(\d+))?\(([^)]*)\)/); if(!m) return;
-      docs.push({t:"admrul",law:nm,kind:"조문",jo:+m[1],gaji:+(m[2]||0),cite:nm+" 제"+m[1]+"조"+(m[2]?"의"+m[2]:""),
-                 title:m[3],ef,text:t.replace(/([^\s\d])(\d{1,2}\. )/g,"$1\n$2")});
+      out.docs.push({t:"admrul",law:nm,kind:"조문",jo:+m[1],gaji:+(m[2]||0),cite:nm+" 제"+m[1]+"조"+(m[2]?"의"+m[2]:""),
+        title:m[3],ef,text:t.replace(/([^\s\d])(\d{1,2}\. )/g,"$1\n$2")});
     });
     arr((r.별표||{}).별표단위).forEach(b=>{
       const no=+b.별표번호||0, parts=chunkLines(flat(b.별표내용).split("\n").map(s=>s.trimEnd()).filter(s=>s.trim()),1800);
-      parts.forEach((p,i)=>docs.push({t:"admrul-byul",law:nm,kind:"별표",byul:no,
+      parts.forEach((p,i)=>out.docs.push({t:"admrul-byul",law:nm,kind:"별표",byul:no,
         cite:nm+" [별표 "+no+"]"+(parts.length>1?" ("+(i+1)+"/"+parts.length+")":""),title:flat(b.별표제목),ef,text:p}));
     });
   }
-  if(!docs.length) throw new Error("받아온 조문이 없습니다");
-  const d=new Date(), p=n=>String(n).padStart(2,"0");
-  return {built:d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+" "+p(d.getHours())+":"+p(d.getMinutes()),
-          at:d.getTime(), ver:DB_VER, live:true, sources, docs};
+  return out;
+}
+async function runPool(items, n, fn){
+  const res=new Array(items.length); let i=0;
+  await Promise.all(Array.from({length:Math.min(n,items.length)},async()=>{ while(i<items.length){ const k=i++; try{ res[k]={ok:true,v:await fn(items[k],k)}; }catch(e){ res[k]={ok:false,e}; } } }));
+  return res;
 }
 
-async function loadLawDbInner(force, progress){
-  let db=null, liveErr="";
-  if(!force){ const c=await idbGet("db"); if(c && c.ver===DB_VER && Date.now()-c.at<DB_TTL) db=c; }
-  if(!db){
-    try{ db=await buildLawDbLive(progress); await idbSet("db",db); }
-    catch(e){ liveErr=e.message; }
-  }
-  if(!db){ const c=await idbGet("db"); if(c && c.ver===DB_VER){ db=c; db.stale=true; } }   // 오래됐어도 저장본이 있으면 사용
-  if(!db) db={live:false, sources:[], docs:[]};
-  LDB.err=liveErr;
-  const docs=db.docs.filter(d=>!d.snap).concat(BYUL_DOCS);
+/* 저장본 → 색인 */
+let DOCSETS={};   // key → docset
+function buildIndex3(){
+  const sets=Object.values(DOCSETS);
+  const docs=[];
+  sets.forEach(s=>s.docs.forEach(d=>docs.push(Object.assign({},d,{od:!!s.od}))));
+  BYUL_DOCS.forEach(d=>docs.push(d));
   docs.forEach((d,i)=>d.i=i);
   const df={}, idx=docs.map(d=>{
     const tf={}, g=grams(d.cite+" "+(d.title||"")+" "+d.text);
@@ -2201,16 +2272,109 @@ async function loadLawDbInner(force, progress){
     return {tf,len:g.length};
   });
   LDB.idx={df,docs:idx,N:idx.length,avg:idx.reduce((a,b)=>a+b.len,0)/(idx.length||1)};
-  LDB.db=Object.assign({},db,{docs});
-  LDB.state=db.live&&db.docs.length?(db.stale?"stale":"live"):"snap";
+  const core=sets.filter(s=>!s.od);
+  LDB.db={live:core.length>0, built:LDB.meta&&LDB.meta.checkedStamp||"", docs,
+    sources:core.map(s=>({kind:s.k==="law"?"법령":"행정규칙",name:s.name,ef:s.ef})).sort((a,b)=>a.kind.localeCompare(b.kind)),
+    od:sets.filter(s=>s.od).map(s=>({name:s.name,ef:s.ef,sn:s.sn,k:s.k}))};
+}
+async function loadCached(){
+  const meta=await idbGet("meta3");
+  LDB.meta=(meta&&meta.ver===DB_VER)?meta:{ver:DB_VER,checked:0,items:{},od:[]};
+  DOCSETS={};
+  const keys=CORE.map(coreKey).concat((LDB.meta.od||[]).map(sn=>"od:"+sn));
+  for(const k of keys){ const v=await idbGet("doc3:"+k); if(v&&v.docs) DOCSETS[k]=v; }
+  buildIndex3();
+  return Object.keys(DOCSETS).length;
+}
+/* 바뀐 법령만(mode="changed") 또는 전부(mode="all") 다시 받기 */
+async function syncLaws(mode, progress){
+  const M=LDB.meta, fails=[];
+  let done=0;
+  progress("현행 법령 목록 확인 중 (0/"+CORE.length+")…");
+  const found=await runPool(CORE,4,async c=>{ const h=await resolveCore(c); progress("현행 법령 목록 확인 중 ("+(++done)+"/"+CORE.length+")…"); return h; });
+  const todo=[];
+  CORE.forEach((c,i)=>{
+    const key=coreKey(c), r=found[i];
+    if(!r.ok){ fails.push(c.n); return; }
+    if(!r.v){ M.items[key]={missing:true,name:c.n}; return; }
+    M.items[key]={name:r.v.name,sn:r.v.sn,ef:r.v.ef};
+    const have=DOCSETS[key];
+    if(mode==="all" || !have || have.sn!==r.v.sn) todo.push([key,r.v]);
+  });
+  let got=0;
+  const fetched=await runPool(todo,3,async([key,item])=>{ progress("개정·신규 법령 받는 중 ("+(++got)+"/"+todo.length+") — "+item.name); return [key,await fetchDocSet(item)]; });
+  const changed=[];
+  fetched.forEach((r,i)=>{ if(r.ok){ const [key,set]=r.v; DOCSETS[key]=set; changed.push(set.name); idbSet("doc3:"+key,set); } else fails.push(todo[i][1].name); });
+  if(fails.length<CORE.length){ M.checked=Date.now(); M.checkedStamp=nowStamp(); }
+  M.lastChanged=changed; M.lastFails=fails;
+  await idbSet("meta3",M);
+  buildIndex3();
+  if(fails.length===CORE.length) throw new Error("국가법령정보센터에 연결하지 못했습니다");
+  return {changed,fails,missing:CORE.filter(c=>M.items[coreKey(c)]&&M.items[coreKey(c)].missing).map(c=>c.n)};
+}
+async function loadLawDbInner(mode, progress){
+  const n=await loadCached();
+  LDB.state=n?"live":"snap";
+  paintStatus(); if(LASTQ) runSearch(LASTQ);
+  const due = mode==="changed" || mode==="all" || !LDB.meta.checked || Date.now()-LDB.meta.checked>LIST_TTL || !n;
+  if(!due) return LDB.db;
+  LDB.state="loading"; LDB.syncing=true; paintStatus();
+  try{
+    const r=await syncLaws(mode==="all"?"all":"changed", progress);
+    LDB.err=""; LDB.lastSync=r;
+    LDB.state="live";
+  }catch(e){
+    LDB.err=e.message; LDB.state=Object.keys(DOCSETS).some(k=>!k.startsWith("od:"))?"stale":"snap";
+  }finally{ LDB.syncing=false; }
   return LDB.db;
 }
-function loadLawDb(force, progress=()=>{}){
-  if(LDB.db && !force) return Promise.resolve(LDB.db);
+function loadLawDb(mode="auto", progress=()=>{}){
   if(LDB.loading) return LDB.loading;
-  LDB.state="loading";
-  LDB.loading=loadLawDbInner(force, progress).finally(()=>{ LDB.loading=null; });
+  LDB.loading=loadLawDbInner(mode, progress).finally(()=>{ LDB.loading=null; });
   return LDB.loading;
+}
+
+/* ③ 기후에너지환경부 소관 다른 법령에서 찾기 */
+const OD_STOP=new Set(["언제","어떻게","무엇","어디","누가","왜","받아야","하나요","되나요","인가요","있나요","해야","하는","관련","기준","경우","대한","대해","알려줘","궁금합니다"]);
+function odKeyword(q){
+  const ws=String(q).replace(/[?.,!~]/g," ").split(/\s+/).map(w=>w.replace(/(은|는|이|가|을|를|의|에서|에게|에|으로|로|과|와|도|만|이란|란)$/,"")).filter(w=>w.length>=2&&!OD_STOP.has(w)&&!/^제?\d+조/.test(w));
+  return ws.sort((a,b)=>b.length-a.length)[0]||"";
+}
+const OD={q:"",list:null,err:"",busy:false};
+async function odSearch(q){
+  const kw=odKeyword(q); OD.q=q; OD.kw=kw; OD.list=null; OD.err="";
+  if(!kw) { OD.list=[]; return; }
+  OD.busy=true;
+  try{
+    const res=await runPool(["law","admrul"],2,k=>listSearch(k,kw,true));
+    const seen=new Set(), out=[];
+    res.forEach(r=>{ if(!r.ok) return; r.v.forEach(x=>{
+      if(!MINISTRY.test(x.org) && x.org) return;
+      if(CORE_NAMES.has(nrm(x.name)) || seen.has(x.sn)) return;
+      seen.add(x.sn); out.push(x); }); });
+    if(res.every(r=>!r.ok)) throw res[0].e;
+    OD.list=out.slice(0,12);
+  }catch(e){ OD.err=e.message||"조회 실패"; OD.list=[]; }
+  finally{ OD.busy=false; }
+}
+async function odFetch(sn){
+  const item=(OD.list||[]).find(x=>x.sn===sn); if(!item) return;
+  const set=await fetchDocSet(item); set.od=true;
+  DOCSETS["od:"+sn]=set; await idbSet("doc3:od:"+sn,set);
+  const M=LDB.meta; M.od=[...new Set([...(M.od||[]),sn])].slice(-30); await idbSet("meta3",M);
+  buildIndex3();
+}
+function odHTML(){
+  if(!LASTQ) return "";
+  let h='<div class="sech">기후에너지환경부 소관 다른 법령 <small>검색어 “'+esc(OD.kw||"")+'” 본문 검색</small></div>';
+  if(OD.busy || OD.list===null) return h+'<div class="odbox"><span class="spin"></span> 국가법령정보센터에서 찾는 중입니다…</div>';
+  if(OD.err) return h+'<div class="odbox">다른 법령 검색에 실패했습니다. <span class="when">'+esc(OD.err)+'</span></div>';
+  if(!OD.list.length) return h+'<div class="odbox">핵심 법령 밖에서는 일치하는 법령을 찾지 못했습니다.</div>';
+  return h+'<div class="odlist">'+OD.list.map(x=>{
+    const have=DOCSETS["od:"+x.sn];
+    return '<div class="oditem"><div><b>'+esc(x.name)+'</b><span>'+esc(x.type)+(x.ef?' · 시행 '+esc(x.ef):'')+'</span></div>'
+      +(have?'<span class="tag dt">받음 — 위 결과에 포함</span>':'<button class="btn ghost sm" data-od="'+esc(x.sn)+'">조문 받아 보기</button>')+'</div>';
+  }).join("")+'</div>';
 }
 const FAC_KW={incin:"소각",heat:"소각열회수",pyro:"열분해",cement:"시멘트",sterile:"멸균",landfill:"매립",food:"음식물"};
 const FAC_BYUL={incin:1,landfill:2,sterile:3,food:4,cement:5,heat:6,pyro:7};
@@ -2249,27 +2413,33 @@ function snip(text, query, n=300){
   return {s:(st>0?"… ":"")+text.slice(st,st+n*2)+" …", cut:true};
 }
 function dbStatus(){
-  const db=LDB.db;
-  if(LDB.state==="loading") return '<div class="dbst"><span class="spin"></span><span id="dbprog">현행 법령을 받는 중입니다…</span></div>';
+  const db=LDB.db, n=db?db.sources.length:0;
+  const srcList=db?'<details class="dbsrc"><summary>법령 '+n+'건 시행일 보기</summary>'+db.sources.map(x=>'<div>'+esc(x.name)+' — '+esc(x.ef)+' 시행</div>').join("")
+     +(db.od&&db.od.length?'<div class="when" style="margin-top:6px">검색으로 받은 법령: '+db.od.map(x=>esc(x.name)).join(", ")+'</div>':'')
+     +(()=>{ const miss=LDB.meta?Object.values(LDB.meta.items||{}).filter(x=>x.missing).map(x=>x.name):[];
+        return miss.length?'<div class="when" style="color:var(--ember)">찾지 못한 법령(이름 확인 필요): '+miss.map(esc).join(", ")+'</div>':''; })()
+     +'<div class="when">마지막 확인 '+esc((LDB.meta&&LDB.meta.checkedStamp)||"-")+'</div></details>':'';
+  const btns='<button class="lk" id="dbchk">바뀐 법령 확인</button><button class="lk" id="dball">전체 다시 받기</button>';
+  if(LDB.syncing) return '<div class="dbst"><span class="spin"></span><span id="dbprog">'+esc(LDB.prog||"현행 법령 확인 중…")+'</span>'
+     +(n?'<span class="when">확인하는 동안에는 저장된 '+n+'건으로 찾습니다</span>':'')+'</div>';
   if(!db) return "";
-  if(LDB.state==="live"||LDB.state==="stale")
-    return '<div class="dbst ok"><span class="dot"></span><b>현행 법령으로 찾습니다</b>'
-      + '<details class="dbsrc"><summary>시행일 보기</summary>'+(db.sources||[]).map(x=>'<div>'+esc(x.name)+' — '+esc(x.ef)+' 시행</div>').join("")
-      + '<div class="when">'+esc(db.built||"")+' 받음'+(LDB.state==="stale"?' · 오늘 갱신 실패, 이전 저장본 사용':'')+'</div></details>'
-      + '<button class="lk" id="dbre">새로 받기</button></div>';
-  return '<div class="dbst bad" title="'+esc(LDB.err||"")+'"><span class="dot"></span><b>현행 법령 연결 안 됨</b> 내장 자료로 찾습니다'
-    + '<button class="lk" id="dbre">다시 시도</button></div>';
+  if(LDB.state==="live"){
+    const ls=LDB.lastSync, note=ls?(ls.changed.length?'개정·신규 '+ls.changed.length+'건 반영':'바뀐 법령 없음')+(ls.fails.length?' · '+ls.fails.length+'건 확인 실패':''):'';
+    return '<div class="dbst ok"><span class="dot"></span><b>현행 법령 '+n+'건으로 찾습니다</b>'+(note?'<span class="when">'+note+'</span>':'')+srcList+btns+'</div>';
+  }
+  if(LDB.state==="stale") return '<div class="dbst bad" title="'+esc(LDB.err||"")+'"><span class="dot"></span><b>오늘 확인 실패</b> 이전에 받은 '+n+'건으로 찾습니다'+srcList+btns+'</div>';
+  return '<div class="dbst bad" title="'+esc(LDB.err||"")+'"><span class="dot"></span><b>현행 법령 연결 안 됨</b> 내장 자료로 찾습니다<button class="lk" id="dbchk">다시 시도</button></div>';
 }
 function paintStatus(){
   const b=$("dbst"); if(!b) return;
   b.innerHTML=dbStatus();
-  const r=$("dbre"); if(r) r.onclick=()=>refreshLawDb(true);
+  const r=$("dbchk"); if(r) r.onclick=()=>refreshLawDb("changed");
+  const r2=$("dball"); if(r2) r2.onclick=()=>{ if(confirm("핵심 법령 "+CORE.length+"건을 모두 다시 받습니다. 1~2분 걸릴 수 있습니다. 진행할까요?")) refreshLawDb("all"); };
 }
-function refreshLawDb(force){
-  LDB.state="loading"; paintStatus();
-  loadLawDb(force, m=>{ const p=$("dbprog"); if(p) p.textContent=m; })
-    .then(()=>{ paintStatus(); if(LASTQ!==null) runSearch(LASTQ); })
-    .catch(e=>{ LDB.err=e.message; LDB.state="snap"; paintStatus(); });
+function refreshLawDb(mode){
+  loadLawDb(mode, m=>{ LDB.prog=m; const p=$("dbprog"); if(p) p.textContent=m; })
+    .then(()=>{ paintStatus(); if(LASTQ) runSearch(LASTQ); })
+    .catch(e=>{ LDB.err=e.message; paintStatus(); });
 }
 
 /* ==========================================================
