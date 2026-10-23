@@ -38,8 +38,7 @@
   .head-in{max-width:940px;margin:0 auto;padding:14px 20px 0}
   .top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
   h1{font-family:var(--sans);margin:0;letter-spacing:-.5px;line-height:1.25;display:flex;flex-wrap:wrap;align-items:baseline;gap:0 8px}
-  h1 .t1{font-size:23px;font-weight:800;background:linear-gradient(100deg,#3B7A1C 0%,#0072BC 70%);-webkit-background-clip:text;background-clip:text;color:transparent}
-  h1 .t2{font-size:23px;font-weight:800;color:#1C2830}
+  h1 .t1,h1 .t2{font-size:23px;font-weight:800;color:#0B3D63}
   @media(max-width:640px){ h1{display:block} h1 .t1,h1 .t2{display:block;font-size:19px} }
   .facpick{display:flex;align-items:center;gap:8px}
   .facpick label{font-size:12px;color:var(--ink3);white-space:nowrap}
@@ -409,8 +408,7 @@
   nav button[data-tone="a"]::after{content:"";position:absolute;right:-12px;top:20%;height:60%;width:1px;background:var(--line)}
   nav button[data-tone="a"]:hover{background:linear-gradient(100deg,#ECF5E1,#E2F0F9)!important;border-color:#7FB2D6!important;color:#1F5F99!important}
   nav button[data-tone="a"][aria-current="true"]{background:linear-gradient(100deg,#5FA830 0%,#2E8BB0 55%,#0072BC 100%)!important;border-color:transparent!important;color:#fff!important;box-shadow:0 2px 8px rgba(0,114,188,.3)}
-  .hm-hero h2{color:var(--ink);font-weight:700}
-  .hm-hero h2::before{content:"";display:inline-block;width:6px;height:.9em;background:#8DC63F;border-radius:3px;margin-right:10px;vertical-align:-1px}
+  .hm-hero h2{display:inline-block;background:linear-gradient(100deg,#3B7A1C,#0072BC);-webkit-background-clip:text;background-clip:text;color:transparent}
   @media(max-width:640px){
     nav{position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0!important;padding:6px 6px calc(6px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line);
       display:grid!important;grid-template-columns:repeat(4,1fr);gap:2px!important;box-shadow:0 -2px 10px rgba(0,40,70,.06)}
@@ -504,7 +502,7 @@
   <div class="topbar-in">
     <span>AI로 제작한 참고용 도구입니다. 법령 원문이 우선합니다.</span>
     <button id="tbMore">유의사항 ▾</button>
-    <span class="ver">v261020-fix1</span>
+    <span class="ver">v261020-fix2</span>
   </div>
 </div>
 <div class="topdrop" id="tbDrop">
@@ -1447,10 +1445,10 @@ function paintOD(q){
 const LIVE_CACHE={};
 const arr = v => v==null ? [] : (Array.isArray(v) ? v : [v]);
 const ymd = s => s&&s.length===8 ? s.slice(0,4)+"-"+s.slice(4,6)+"-"+s.slice(6) : (s||"");
-async function lawGet(params, keep=true){
+async function lawGet(params, keep=true, ms=15000){
   const url=LAW_API+(params.svc||"lawService.do")+"?type=JSON&"+(IS_LOCAL?"":"OC="+encodeURIComponent(LAW_OC)+"&")+params.q;
   if(LIVE_CACHE[url]) return LIVE_CACHE[url];
-  const ctl=new AbortController(), tm=setTimeout(()=>ctl.abort(),12000);
+  const ctl=new AbortController(), tm=setTimeout(()=>ctl.abort(),ms);
   try{
     const res=await fetch(url,{signal:ctl.signal});
     const j=await res.json().catch(()=>({}));
@@ -2206,7 +2204,7 @@ function listItems(j,k){
 }
 async function listSearch(k,query,body){
   const q="target="+k+"&display=50"+(body?"&search=2":"")+"&query="+encodeURIComponent(query);
-  return listItems(await lawGet({svc:"lawSearch.do",q},false),k);
+  return listItems(await lawGetRetry({svc:"lawSearch.do",q},20000),k);
 }
 /* 핵심 법령 한 건의 현행 시행본 찾기 */
 async function resolveCore(c){
@@ -2220,7 +2218,7 @@ async function resolveCore(c){
 async function fetchDocSet(item){
   const out={k:item.k,name:item.name,sn:item.sn,ef:item.ef,org:item.org||"",built:nowStamp(),docs:[]};
   if(item.k==="law"){
-    const law=(await lawGet({q:"target=law&"+(item.sn?"MST="+item.sn:"ID="+item.id)},false)).법령||{}, info=law.기본정보||{};
+    const law=(await lawGetRetry({q:"target=law&"+(item.sn?"MST="+item.sn:"ID="+item.id)},90000)).법령||{}, info=law.기본정보||{};
     const name=info.법령명_한글||item.name, ef=ymd(info.시행일자)||item.ef, lid=String(info.법령ID||item.id||"");
     out.name=name; out.ef=ef;
     arr((law.조문||{}).조문단위).forEach(u=>{
@@ -2238,7 +2236,7 @@ async function fetchDocSet(item){
         cite:name+" "+label+(parts.length>1?" ("+(i+1)+"/"+parts.length+")":""),title:flat(b.별표제목),ef,text:p}));
     });
   } else {
-    const r=(await lawGet({q:"target=admrul&ID="+item.sn},false)).AdmRulService||{}, info=r.행정규칙기본정보||{};
+    const r=(await lawGetRetry({q:"target=admrul&ID="+item.sn},90000)).AdmRulService||{}, info=r.행정규칙기본정보||{};
     const nm=info.행정규칙명||item.name, ef=ymd(info.시행일자)||item.ef;
     out.name=nm; out.ef=ef;
     arr(r.조문내용).forEach(t=>{
@@ -2253,6 +2251,11 @@ async function fetchDocSet(item){
     });
   }
   return out;
+}
+async function lawGetRetry(params, ms){
+  try{ return await lawGet(params,false,ms); }
+  catch(e){ if(!/시간이 초과|연결하지 못했/.test(e.message)) throw e;
+    await new Promise(r=>setTimeout(r,1500)); return await lawGet(params,false,ms); }
 }
 async function runPool(items, n, fn){
   const res=new Array(items.length); let i=0;
@@ -2294,12 +2297,14 @@ async function loadCached(){
 async function syncLaws(mode, progress){
   const M=LDB.meta, fails=[];
   let done=0;
-  let nf=0; LDB.firstErr="";
+  let nf=0; const kf={law:0,admrul:0}, ko={law:0,admrul:0}; LDB.firstErr="";
   const tick=()=>progress("현행 법령 목록 확인 중 ("+done+"/"+CORE.length+")"+(nf?" · 실패 "+nf+"건":"")+"…");
   tick();
   const found=await runPool(CORE,2,async c=>{
-    try{ let h=await resolveCore(c); if(!h&&c.id) h={k:"law",name:c.n,sn:"",id:c.id,ef:""}; return h; }
-    catch(e){ nf++; if(!LDB.firstErr) LDB.firstErr=e.message; console.warn("[법령 목록]",c.n,e.message);
+    try{
+      if(kf[c.k]>=4 && !ko[c.k]) throw new Error(LDB.firstErr||"목록 조회 실패");   // 같은 종류가 처음 4건 모두 실패하면 나머지는 기다리지 않음
+      let h=await resolveCore(c); ko[c.k]++; if(!h&&c.id) h={k:"law",name:c.n,sn:"",id:c.id,ef:""}; return h; }
+    catch(e){ nf++; kf[c.k]++; if(!LDB.firstErr) LDB.firstErr=e.message; console.warn("[법령 목록]",c.n,e.message);
       if(c.id) return {k:"law",name:c.n,sn:"",id:c.id,ef:""}; throw e; }
     finally{ done++; tick(); } });
   const todo=[];
@@ -2312,9 +2317,14 @@ async function syncLaws(mode, progress){
     if(mode==="all" || !have || (r.v.sn && have.sn!==r.v.sn)) todo.push([key,r.v]);
   });
   let got=0;
-  const fetched=await runPool(todo,2,async([key,item])=>{ progress("개정·신규 법령 받는 중 ("+(++got)+"/"+todo.length+") — "+item.name); return [key,await fetchDocSet(item)]; });
   const changed=[];
-  fetched.forEach((r,i)=>{ if(r.ok){ const [key,set]=r.v; DOCSETS[key]=set; changed.push(set.name); idbSet("doc3:"+key,set); } else fails.push(todo[i][1].name); });
+  const fetched=await runPool(todo,1,async([key,item])=>{
+    progress("법령 본문 받는 중 ("+(++got)+"/"+todo.length+") — "+item.name);
+    const set=await fetchDocSet(item);
+    DOCSETS[key]=set; changed.push(set.name); await idbSet("doc3:"+key,set);
+    buildIndex3(); if(LDB.state!=="live"&&LDB.db.live){ /* 첫 건부터 검색 가능 */ } paintStatus();
+    return [key,set]; });
+  fetched.forEach((r,i)=>{ if(!r.ok){ fails.push(todo[i][1].name); if(!LDB.firstErr) LDB.firstErr=r.e.message; } });
   if(fails.length<CORE.length){ M.checked=Date.now(); M.checkedStamp=nowStamp(); }
   M.lastChanged=changed; M.lastFails=fails;
   await idbSet("meta3",M);
