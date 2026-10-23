@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>폐기물처리시설 검사업무 AI 지원 플랫폼</title>
+<title>폐기물처리시설 검사·진단 업무 AI 지원 플랫폼</title>
 <meta name="theme-color" content="#0072BC">
 <meta name="robots" content="noindex,nofollow">
 <meta name="description" content="폐기물처리시설 검사업무 AI 지원 플랫폼 — 시설별 검사 법령·기준 검색, 검사시기 산정, 사전 모의점검">
@@ -37,7 +37,10 @@
   .brand{display:flex;align-items:center;gap:14px;min-width:0}
   .head-in{max-width:940px;margin:0 auto;padding:14px 20px 0}
   .top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
-  h1{font-family:var(--sans);font-size:19px;font-weight:700;margin:0;letter-spacing:-.3px;color:var(--ink)}
+  h1{font-family:var(--sans);margin:0;letter-spacing:-.5px;line-height:1.25;display:flex;flex-wrap:wrap;align-items:baseline;gap:0 8px}
+  h1 .t1{font-size:23px;font-weight:800;background:linear-gradient(100deg,#3B7A1C 0%,#0072BC 70%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  h1 .t2{font-size:23px;font-weight:800;color:#1C2830}
+  @media(max-width:640px){ h1{display:block} h1 .t1,h1 .t2{display:block;font-size:19px} }
   .facpick{display:flex;align-items:center;gap:8px}
   .facpick label{font-size:12px;color:var(--ink3);white-space:nowrap}
   #fac{border:1px solid var(--accent);border-radius:6px;padding:7px 11px;font:inherit;font-size:14px;
@@ -406,7 +409,8 @@
   nav button[data-tone="a"]::after{content:"";position:absolute;right:-12px;top:20%;height:60%;width:1px;background:var(--line)}
   nav button[data-tone="a"]:hover{background:linear-gradient(100deg,#ECF5E1,#E2F0F9)!important;border-color:#7FB2D6!important;color:#1F5F99!important}
   nav button[data-tone="a"][aria-current="true"]{background:linear-gradient(100deg,#5FA830 0%,#2E8BB0 55%,#0072BC 100%)!important;border-color:transparent!important;color:#fff!important;box-shadow:0 2px 8px rgba(0,114,188,.3)}
-  .hm-hero h2{display:inline-block;background:linear-gradient(100deg,#3B7A1C,#0072BC);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hm-hero h2{color:var(--ink);font-weight:700}
+  .hm-hero h2::before{content:"";display:inline-block;width:6px;height:.9em;background:#8DC63F;border-radius:3px;margin-right:10px;vertical-align:-1px}
   @media(max-width:640px){
     nav{position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0!important;padding:6px 6px calc(6px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line);
       display:grid!important;grid-template-columns:repeat(4,1fr);gap:2px!important;box-shadow:0 -2px 10px rgba(0,40,70,.06)}
@@ -500,7 +504,7 @@
   <div class="topbar-in">
     <span>AI로 제작한 참고용 도구입니다. 법령 원문이 우선합니다.</span>
     <button id="tbMore">유의사항 ▾</button>
-    <span class="ver">v261020-laws30</span>
+    <span class="ver">v261020-fix1</span>
   </div>
 </div>
 <div class="topdrop" id="tbDrop">
@@ -520,7 +524,7 @@
 <header>
   <div class="head-in">
     <div class="top">
-      <div class="brand"><h1>폐기물처리시설 검사 안내</h1></div>
+      <div class="brand"><h1><span class="t1">폐기물처리시설 검사·진단</span><span class="t2">업무 AI 지원 플랫폼</span></h1></div>
       <div class="facpick">
         <label for="fac">시설 종류</label>
         <select id="fac"></select>
@@ -1446,7 +1450,7 @@ const ymd = s => s&&s.length===8 ? s.slice(0,4)+"-"+s.slice(4,6)+"-"+s.slice(6) 
 async function lawGet(params, keep=true){
   const url=LAW_API+(params.svc||"lawService.do")+"?type=JSON&"+(IS_LOCAL?"":"OC="+encodeURIComponent(LAW_OC)+"&")+params.q;
   if(LIVE_CACHE[url]) return LIVE_CACHE[url];
-  const ctl=new AbortController(), tm=setTimeout(()=>ctl.abort(),15000);
+  const ctl=new AbortController(), tm=setTimeout(()=>ctl.abort(),12000);
   try{
     const res=await fetch(url,{signal:ctl.signal});
     const j=await res.json().catch(()=>({}));
@@ -2143,7 +2147,7 @@ const BYUL_DOCS=(()=>{ const out=[];
 const DB_VER=3, LIST_TTL=24*3600*1000;
 const CORE=[
  // 폐기물
- {n:"폐기물관리법",k:"law"},{n:"폐기물관리법 시행령",k:"law"},{n:"폐기물관리법 시행규칙",k:"law"},
+ {n:"폐기물관리법",k:"law",id:"001771"},{n:"폐기물관리법 시행령",k:"law",id:"005353"},{n:"폐기물관리법 시행규칙",k:"law",id:"008567"},
  // 기술진단
  {n:"환경기술 및 환경산업 지원법",k:"law"},{n:"환경기술 및 환경산업 지원법 시행령",k:"law"},{n:"환경기술 및 환경산업 지원법 시행규칙",k:"law"},
  // 재활용
@@ -2216,7 +2220,7 @@ async function resolveCore(c){
 async function fetchDocSet(item){
   const out={k:item.k,name:item.name,sn:item.sn,ef:item.ef,org:item.org||"",built:nowStamp(),docs:[]};
   if(item.k==="law"){
-    const law=(await lawGet({q:"target=law&MST="+item.sn},false)).법령||{}, info=law.기본정보||{};
+    const law=(await lawGet({q:"target=law&"+(item.sn?"MST="+item.sn:"ID="+item.id)},false)).법령||{}, info=law.기본정보||{};
     const name=info.법령명_한글||item.name, ef=ymd(info.시행일자)||item.ef, lid=String(info.법령ID||item.id||"");
     out.name=name; out.ef=ef;
     arr((law.조문||{}).조문단위).forEach(u=>{
@@ -2290,8 +2294,14 @@ async function loadCached(){
 async function syncLaws(mode, progress){
   const M=LDB.meta, fails=[];
   let done=0;
-  progress("현행 법령 목록 확인 중 (0/"+CORE.length+")…");
-  const found=await runPool(CORE,4,async c=>{ const h=await resolveCore(c); progress("현행 법령 목록 확인 중 ("+(++done)+"/"+CORE.length+")…"); return h; });
+  let nf=0; LDB.firstErr="";
+  const tick=()=>progress("현행 법령 목록 확인 중 ("+done+"/"+CORE.length+")"+(nf?" · 실패 "+nf+"건":"")+"…");
+  tick();
+  const found=await runPool(CORE,2,async c=>{
+    try{ let h=await resolveCore(c); if(!h&&c.id) h={k:"law",name:c.n,sn:"",id:c.id,ef:""}; return h; }
+    catch(e){ nf++; if(!LDB.firstErr) LDB.firstErr=e.message; console.warn("[법령 목록]",c.n,e.message);
+      if(c.id) return {k:"law",name:c.n,sn:"",id:c.id,ef:""}; throw e; }
+    finally{ done++; tick(); } });
   const todo=[];
   CORE.forEach((c,i)=>{
     const key=coreKey(c), r=found[i];
@@ -2299,17 +2309,17 @@ async function syncLaws(mode, progress){
     if(!r.v){ M.items[key]={missing:true,name:c.n}; return; }
     M.items[key]={name:r.v.name,sn:r.v.sn,ef:r.v.ef};
     const have=DOCSETS[key];
-    if(mode==="all" || !have || have.sn!==r.v.sn) todo.push([key,r.v]);
+    if(mode==="all" || !have || (r.v.sn && have.sn!==r.v.sn)) todo.push([key,r.v]);
   });
   let got=0;
-  const fetched=await runPool(todo,3,async([key,item])=>{ progress("개정·신규 법령 받는 중 ("+(++got)+"/"+todo.length+") — "+item.name); return [key,await fetchDocSet(item)]; });
+  const fetched=await runPool(todo,2,async([key,item])=>{ progress("개정·신규 법령 받는 중 ("+(++got)+"/"+todo.length+") — "+item.name); return [key,await fetchDocSet(item)]; });
   const changed=[];
   fetched.forEach((r,i)=>{ if(r.ok){ const [key,set]=r.v; DOCSETS[key]=set; changed.push(set.name); idbSet("doc3:"+key,set); } else fails.push(todo[i][1].name); });
   if(fails.length<CORE.length){ M.checked=Date.now(); M.checkedStamp=nowStamp(); }
   M.lastChanged=changed; M.lastFails=fails;
   await idbSet("meta3",M);
   buildIndex3();
-  if(fails.length===CORE.length) throw new Error("국가법령정보센터에 연결하지 못했습니다");
+  if(fails.length===CORE.length) throw new Error("국가법령정보센터 조회 실패"+(LDB.firstErr?" — "+LDB.firstErr:""));
   return {changed,fails,missing:CORE.filter(c=>M.items[coreKey(c)]&&M.items[coreKey(c)].missing).map(c=>c.n)};
 }
 async function loadLawDbInner(mode, progress){
@@ -2424,11 +2434,11 @@ function dbStatus(){
      +(n?'<span class="when">확인하는 동안에는 저장된 '+n+'건으로 찾습니다</span>':'')+'</div>';
   if(!db) return "";
   if(LDB.state==="live"){
-    const ls=LDB.lastSync, note=ls?(ls.changed.length?'개정·신규 '+ls.changed.length+'건 반영':'바뀐 법령 없음')+(ls.fails.length?' · '+ls.fails.length+'건 확인 실패':''):'';
+    const ls=LDB.lastSync, note=ls?(ls.changed.length?'개정·신규 '+ls.changed.length+'건 반영':'바뀐 법령 없음')+(ls.fails.length?' · '+ls.fails.length+'건 확인 실패'+(LDB.firstErr?' ('+LDB.firstErr+')':''):''):'';
     return '<div class="dbst ok"><span class="dot"></span><b>현행 법령 '+n+'건으로 찾습니다</b>'+(note?'<span class="when">'+note+'</span>':'')+srcList+btns+'</div>';
   }
-  if(LDB.state==="stale") return '<div class="dbst bad" title="'+esc(LDB.err||"")+'"><span class="dot"></span><b>오늘 확인 실패</b> 이전에 받은 '+n+'건으로 찾습니다'+srcList+btns+'</div>';
-  return '<div class="dbst bad" title="'+esc(LDB.err||"")+'"><span class="dot"></span><b>현행 법령 연결 안 됨</b> 내장 자료로 찾습니다<button class="lk" id="dbchk">다시 시도</button></div>';
+  if(LDB.state==="stale") return '<div class="dbst bad"><span class="dot"></span><b>오늘 확인 실패</b> 이전에 받은 '+n+'건으로 찾습니다'+(LDB.err?'<span class="when">'+esc(LDB.err)+'</span>':'')+srcList+btns+'</div>';
+  return '<div class="dbst bad"><span class="dot"></span><b>현행 법령 연결 안 됨</b> 내장 자료로 찾습니다'+(LDB.err?'<span class="when">'+esc(LDB.err)+'</span>':'')+'<button class="lk" id="dbchk">다시 시도</button></div>';
 }
 function paintStatus(){
   const b=$("dbst"); if(!b) return;
