@@ -556,7 +556,7 @@
   <div class="topbar-in">
     <span>AI로 제작한 참고용 도구입니다. 법령 원문이 우선합니다.</span>
     <button id="tbMore">유의사항 ▾</button>
-    <span class="ver">v261124-coin3</span>
+    <span class="ver">v261124-proxy</span>
   </div>
 </div>
 <div class="topdrop" id="tbDrop">
@@ -1287,10 +1287,10 @@ const SKEY="wf-inspect-v3", SKEY_OLD="wf-inspect-v2";
            · 로컬:       python tools/dev_server.py  (.env)
            · GitHub Pages처럼 서버 함수가 없는 곳: 이용자가 화면에서 입력한 키(브라우저에만 저장)를 씀
    ---------------------------------------------------------- */
-const LAW_OC="waste2026";
+const LAW_PROXY="https://waste-law.ultraki4.workers.dev/law/";   // 인증키는 이 중계 서버(Cloudflare Worker)에만 있습니다
 const IS_LOCAL=/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
 const NO_SERVER=/\.github\.io$/.test(location.hostname) || !/^https?:$/.test(location.protocol);
-const LAW_API = IS_LOCAL ? "/api/law/" : "https://www.law.go.kr/DRF/";
+const LAW_API = IS_LOCAL ? "/api/law/" : LAW_PROXY;
 
 const f = ()=>FAC[CUR];
 function facOpts(){ $("fac").innerHTML = Object.entries(FAC).map(([k,v])=>'<option value="'+k+'">'+esc(v.name)+'</option>').join(""); }
@@ -1502,7 +1502,7 @@ const LIVE_CACHE={};
 const arr = v => v==null ? [] : (Array.isArray(v) ? v : [v]);
 const ymd = s => s&&s.length===8 ? s.slice(0,4)+"-"+s.slice(4,6)+"-"+s.slice(6) : (s||"");
 async function lawGet(params, keep=true, ms=15000){
-  const url=LAW_API+(params.svc||"lawService.do")+"?type=JSON&"+(IS_LOCAL?"":"OC="+encodeURIComponent(LAW_OC)+"&")+params.q;
+  const url=LAW_API+(params.svc||"lawService.do")+"?type=JSON&"+params.q;
   if(LIVE_CACHE[url]) return LIVE_CACHE[url];
   const ctl=new AbortController(), tm=setTimeout(()=>ctl.abort(),ms);
   try{
@@ -1514,13 +1514,13 @@ async function lawGet(params, keep=true, ms=15000){
     return keep ? (LIVE_CACHE[url]=j) : j;
   }catch(e){
     throw new Error(e.name==="AbortError" ? "응답 시간이 초과되었습니다"
-      : e instanceof TypeError ? (IS_LOCAL ? "로컬 중계 서버에 연결하지 못했습니다" : "국가법령정보센터에 연결하지 못했습니다(open.law.go.kr에 등록한 도메인에서만 조회됩니다)")
+      : e instanceof TypeError ? (IS_LOCAL ? "로컬 중계 서버에 연결하지 못했습니다" : "법령 중계 서버에 연결하지 못했습니다")
       : (e.message||"조회 실패"));
   }finally{ clearTimeout(tm); }
 }
 async function liveLaw(a){
   const g=a.gaji||0;
-  const j=await lawGet({q:"target=law&ID="+a.id+"&JO="+String(a.jo).padStart(4,"0")+String(g).padStart(2,"0")});
+  const j=await lawGet({q:"target=law&ID="+a.id});
   const info=(j.법령||{}).기본정보||{};
   const unit=arr(((j.법령||{}).조문||{}).조문단위).find(u=>u.조문여부==="조문" && +u.조문번호===a.jo && +(u.조문가지번호||0)===g);
   if(!unit) throw new Error("해당 조문을 찾지 못했습니다");
@@ -2973,7 +2973,10 @@ renderAll();
   };
   if("serviceWorker" in navigator && location.protocol.indexOf("http")===0){
     window.addEventListener("load", function(){
-      navigator.serviceWorker.register("sw.js").catch(function(){});
+      var had=!!navigator.serviceWorker.controller, reloaded=false;
+      navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(function(r){ r.update().catch(function(){}); }).catch(function(){});
+      // 새 버전이 설치되면 한 번만 자동 새로고침
+      navigator.serviceWorker.addEventListener("controllerchange",function(){ if(had && !reloaded){ reloaded=true; location.reload(); } });
     });
   }
 })();
