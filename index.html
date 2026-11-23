@@ -27,6 +27,7 @@
   html[data-tone="b"]{--accent:#0072BC;--accent-soft:#E2F0F9;--accent-dk:#00568F;--accent-ln:#A9D1EB}
   html[data-tone="c"]{--accent:#4F9A2A;--accent-soft:#ECF5E1;--accent-dk:#3B7A1C;--accent-ln:#BEDCA0}
   html[data-tone="d"]{--accent:#00849E;--accent-soft:#E0F2F6;--accent-dk:#006780;--accent-ln:#A3D6E2}
+  html[data-tone="e"]{--accent:#B07338;--accent-soft:#F8EFE5;--accent-dk:#8A5726;--accent-ln:#E4C6A3}
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
@@ -402,7 +403,7 @@
   nav button svg{width:19px;height:19px;flex-shrink:0}
   nav button:hover{border-color:var(--tc)!important;color:var(--tc)!important;background:var(--ts)!important}
   nav button[data-tone="a"]{--tc:#1F5F99;--ts:#E3EDF6} nav button[data-tone="b"]{--tc:#0072BC;--ts:#E2F0F9}
-  nav button[data-tone="c"]{--tc:#4F9A2A;--ts:#ECF5E1} nav button[data-tone="d"]{--tc:#00849E;--ts:#E0F2F6}
+  nav button[data-tone="c"]{--tc:#4F9A2A;--ts:#ECF5E1} nav button[data-tone="d"]{--tc:#00849E;--ts:#E0F2F6} nav button[data-tone="e"]{--tc:#B07338;--ts:#F8EFE5}
   nav button[aria-current="true"]{background:var(--tc)!important;border-color:var(--tc)!important;color:#fff!important;box-shadow:0 2px 6px color-mix(in srgb,var(--tc) 35%,transparent)}
   nav button[data-tone="a"]{margin-right:14px;position:relative}
   nav button[data-tone="a"]::after{content:"";position:absolute;right:-12px;top:20%;height:60%;width:1px;background:var(--line)}
@@ -411,7 +412,7 @@
   .hm-hero h2{display:inline-block;background:linear-gradient(100deg,#3B7A1C,#0072BC);-webkit-background-clip:text;background-clip:text;color:transparent}
   @media(max-width:640px){
     nav{position:fixed;left:0;right:0;bottom:0;z-index:50;margin:0!important;padding:6px 6px calc(6px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line);
-      display:grid!important;grid-template-columns:repeat(4,1fr);gap:2px!important;box-shadow:0 -2px 10px rgba(0,40,70,.06)}
+      display:grid!important;grid-template-columns:repeat(4,1fr) .75fr;gap:2px!important;box-shadow:0 -2px 10px rgba(0,40,70,.06)}
     nav button{flex-direction:column;gap:3px;border:0!important;border-radius:10px!important;padding:7px 2px!important;font-size:11.5px!important;background:none!important;justify-content:center}
     nav button svg{width:22px;height:22px}
     nav button span{white-space:nowrap}
@@ -434,6 +435,59 @@
   .oditem{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:#fff}
   .oditem b{display:block;font-size:14.5px}
   .oditem span{font-size:12.5px;color:var(--ink3)}
+  nav button .ts{display:none}
+  nav button.nav-mini{margin-left:auto;align-self:center;width:54px;height:54px;padding:0!important;border-radius:50%!important;
+    flex-direction:column;justify-content:center;gap:0!important;font-size:10.5px!important;font-weight:800!important;line-height:1.1;
+    background:radial-gradient(circle at 35% 30%,#E5B98C 0%,#C98C55 55%,#A97140 100%)!important;border:2px solid #946136!important;color:#fff!important;
+    box-shadow:inset 0 0 0 3px #C98C55,inset 0 0 0 4.5px rgba(255,255,255,.5),0 3px 6px rgba(120,80,40,.28)}
+  nav button.nav-mini .tl{display:none} nav button.nav-mini .ts{display:inline;letter-spacing:.5px}
+  nav button.nav-mini .coin{font-size:19px;font-weight:900;line-height:1;text-shadow:0 1px 0 rgba(0,0,0,.25)}
+  nav button.nav-mini:hover{filter:brightness(1.07);color:#fff!important}
+  nav button.nav-mini[aria-current="true"]{box-shadow:inset 0 0 0 3px #C98C55,inset 0 0 0 4.5px rgba(255,255,255,.5),0 0 0 3px #EEDCC6!important}
+  @media(max-width:640px){ nav button .tl{display:none} nav button .ts{display:inline} nav button{font-size:11px!important} nav button.nav-mini{margin:0 auto;width:48px;height:48px;border-radius:50%!important;align-self:center} nav button.nav-mini .coin{font-size:17px} }
+  .fe-cond{margin:4px 0 12px;display:flex;gap:6px;flex-wrap:wrap}
+  .fe-chk{display:flex;flex-direction:column;gap:6px;margin-top:12px;font-size:14px}
+  .fe-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .fe-grid .card{margin-top:18px}
+  .fe-t{width:100%;border-collapse:collapse;font-size:14px}
+  .fe-t th{text-align:left;font-weight:600;padding:10px 8px 10px 0;width:30%;vertical-align:top;color:var(--ink2);border-bottom:1px solid var(--line2)}
+  .fe-t td{padding:10px 6px;border-bottom:1px solid var(--line2);vertical-align:top}
+  .fe-t td b{font-size:17px;color:var(--ink);white-space:nowrap}
+  .fe-t td:nth-child(2){width:36%;white-space:nowrap}
+  .fe-t th{width:26%!important}
+  .fe-t tr.hl th,.fe-t tr.hl td{background:var(--accent-soft)}
+  .fe-t tr.hl td b{color:var(--accent-dk)}
+  .fe-w{display:block;font-size:12px;color:var(--ink3)}
+  .fe-b{font-size:12.5px;color:var(--ink2)}
+  .fe-b .tag{margin-left:4px}
+  .fe-na{color:var(--ink3);font-size:13px}
+  .fe-na2{color:var(--ink2);font-size:14px;background:var(--line2);border-radius:8px;padding:12px 14px;margin:6px 0}
+  .fe-n{font-size:13px;color:var(--ink2);margin:10px 0 0}
+  .fe-src{font-size:12px;color:var(--ink3);margin:12px 0 0}
+  .fe-cmp{margin-top:14px;background:#ECF5E1;border:1px dashed #9CC97A;border-radius:10px;padding:11px 14px;font-size:14px}
+  .fe-cmp b{color:#3B7A1C;margin-right:6px}
+  .fe-notes{margin:0;padding-left:20px;font-size:14px;line-height:1.75}
+  .fe-in{border-collapse:collapse;width:100%;min-width:520px;margin-bottom:10px}
+  .fe-in th{font-size:12.5px;color:var(--ink2);text-align:left;font-weight:600;padding:4px 8px 4px 0;white-space:nowrap}
+  .fe-in td{padding:5px 8px 5px 0;vertical-align:middle}
+  .fe-in td:nth-child(2),.fe-in td:nth-child(3){width:42%}
+  .fe-del{color:var(--ember)!important}
+  .fe-hint{font-size:12.5px;color:var(--ink3);margin-left:10px}
+  .fe-t2{width:100%;border-collapse:collapse;font-size:14px;min-width:480px}
+  .fe-t2 th{font-size:12.5px;color:var(--ink2);text-align:left;font-weight:700;padding:8px;border-bottom:2px solid var(--line);background:var(--line2)}
+  .fe-t2 td{padding:9px 8px;border-bottom:1px solid var(--line2);vertical-align:top;white-space:nowrap}
+  .fe-t2 td:first-child{white-space:normal}
+  .fe-t2 .hl{background:var(--accent-soft)}
+  .fe-t2 td b{font-size:15.5px}
+  .fe-t2 tr.sum td{border-top:2px solid var(--line);font-weight:600}
+  .fe-t2 tr.vat td{color:var(--ink2);font-size:13px;padding-top:4px;padding-bottom:4px}
+  .fe-t2 tr.sum2 td{border-top:1px solid var(--line);font-weight:700}
+  .fe-t2 tr.sum2 td b{color:var(--accent-dk)}
+  .fe-t2 .tag{margin-left:6px}
+  .fe-big{margin:14px 0 0;font-size:15px;color:var(--ink2)}
+  .fe-big b{font-size:22px;color:var(--accent-dk);margin:0 6px}
+  .fe-big span{display:block;font-size:12.5px;color:var(--ink3)}
+  @media(max-width:760px){ .fe-grid{grid-template-columns:1fr} }
   .prof{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
   .edrow{display:grid;grid-template-columns:76px 1fr 1fr;gap:6px;margin-top:6px}
   .edrow select,.edrow input{border:1px solid var(--line);border-radius:5px;padding:5px 7px;font:inherit;font-size:12.5px;background:#fff}
@@ -502,7 +556,7 @@
   <div class="topbar-in">
     <span>AI로 제작한 참고용 도구입니다. 법령 원문이 우선합니다.</span>
     <button id="tbMore">유의사항 ▾</button>
-    <span class="ver">v261023-extra</span>
+    <span class="ver">v261124-coin3</span>
   </div>
 </div>
 <div class="topdrop" id="tbDrop">
@@ -533,6 +587,7 @@
       <button data-p="ai" data-tone="b" aria-current="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h5a3 3 0 0 1 3 3v12a2.5 2.5 0 0 0-2.5-2.5H4zM20 5h-5a3 3 0 0 0-3 3v12a2.5 2.5 0 0 1 2.5-2.5H20z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg><span>법령 안내·검색</span></button>
       <button data-p="self" data-tone="c" aria-current="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6v3H9zM7 4.5H5V21h14V4.5h-2M8.5 13l2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg><span>사전 모의점검</span></button>
       <button data-p="rev" data-tone="d" aria-current="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg><span>종합 의견</span></button>
+      <button data-p="fee" data-tone="e" aria-current="false" class="nav-mini" title="검사수수료·기술진단비용 계산"><span class="coin" aria-hidden="true">₩</span><span class="tl">비용 계산</span><span class="ts">비용</span></button>
     </nav>
   </div>
 </header>
@@ -541,6 +596,7 @@
   <section class="pane on" id="p-home"></section>
   <section class="pane" id="p-ai"></section>
   <section class="pane" id="p-self"></section>
+  <section class="pane" id="p-fee"></section>
   <section class="pane" id="p-rev"></section>
   <footer>
     <div>
@@ -1243,11 +1299,11 @@ function loadState(){
     const raw=localStorage.getItem(SKEY), v=JSON.parse(raw||localStorage.getItem(SKEY_OLD)||"{}");
     if(v.cur && FAC[v.cur]) CUR=v.cur;
     QLOG=v.qlog||[]; LASTCALC=v.calc||null;
-    if(raw){ VALS=v.vals||{}; PROF=v.prof||{}; }
+    if(raw){ VALS=v.vals||{}; PROF=v.prof||{}; FEEIN=v.fee||{}; }
   }catch(e){}
 }
 function saveState(){
-  try{ localStorage.setItem(SKEY, JSON.stringify({cur:CUR,prof:PROF,vals:VALS,qlog:QLOG.slice(-20),calc:LASTCALC})); }catch(e){}
+  try{ localStorage.setItem(SKEY, JSON.stringify({cur:CUR,prof:PROF,vals:VALS,qlog:QLOG.slice(-20),calc:LASTCALC,fee:FEEIN})); }catch(e){}
 }
 
 /* ==========================================================
@@ -1978,7 +2034,7 @@ function todo(D){
   if(t.fail) L.push(["부적합 "+t.fail+"개 항목을 보완합니다.", shortList(D.fails)+" — 보완 방법은 아래 의견에 있습니다."]);
   if(t.check) L.push(["남은 "+t.check+"개 항목을 입력합니다.","해당하지 않는 항목은 ‘해당없음’을 고르시면 됩니다."]);
   if(t.manual) L.push(["직접 확인 "+t.manual+"개 항목을 허가조건과 비교합니다.","자동 판정 기준이 없는 항목입니다."]);
-  if(tm&&tm.dClose>=0) L.push(["검사기관에 검사를 신청합니다.","신청 마감은 "+tm.deadline+"입니다(검사 희망일 15일 전)."+(tm.applyPassed?"":" 권장 신청일은 "+tm.apply+"입니다.")]);
+  if(tm&&tm.dClose>=0) L.push(["검사기관에 검사를 신청합니다.","신청 마감은 "+tm.deadline+"입니다(검사 희망일 15일 전)."+(tm.applyPassed?"":" 권장 신청일은 "+tm.apply+"입니다.")+(feeRegular()!=null?" 예상 정기검사 수수료는 부가세 포함 "+wonW(withVat(feeRegular()))+"입니다.":"")]);
   L.push(["근거 서류를 모아 둡니다.","운영일지, 측정 기록, 검·교정 성적서, 설계도서, 직전 검사결과서를 한곳에 준비해 주십시오."]);
   return L.slice(0,5);
 }
@@ -2059,7 +2115,8 @@ function buildRev(){
       else if(tm.dOpen<=0) tp=fill(pick(POOL.tIn),{...o,d:tm.dClose});
       else if(tm.dOpen<=90) tp=fill(pick(tm.applyPassed?POOL.tSoonLate:POOL.tSoon),o);
       else tp=fill(pick(POOL.tFar),o);
-      sec.push({h:"검사 일정",p:[tp],kv:[["검사 기준일",tm.std],["검사기간",tm.win?tm.open+" ~ "+tm.close:"검사기관 확인 필요"],["신청 마감",tm.deadline]]});
+      const fr=feeRegular();
+      sec.push({h:"검사 일정",p:[tp],kv:[["검사 기준일",tm.std],["검사기간",tm.win?tm.open+" ~ "+tm.close:"검사기관 확인 필요"],["신청 마감",tm.deadline]].concat(fr!=null?[["예상 정기검사 수수료",wonW(withVat(fr))+" (부가세 포함, 신청 시 전액 납부)"]]:[])});
     }
     /* 확인 항목 목록 */
     const rows=[];
@@ -2624,7 +2681,7 @@ function renderHome(){
    + '<li data-go="ai"><b>법령 확인</b><span>궁금한 기준·절차를 법령에서 바로 찾습니다.</span></li>'
    + '<li data-go="self"><b>사전 모의점검</b><span>검사 일정을 계산하고 항목을 입력하면 바로 판정됩니다.</span></li>'
    + '<li data-go="rev"><b>종합 의견</b><span>점검 결과를 의견서로 정리해 복사·인쇄합니다.</span></li>'
-   + '</ol></div>'
+   + '</ol><p class="hm-cap">검사수수료와 기술진단비용은 오른쪽 끝 주황 동전 모양 <a href="#" data-go="fee" class="lk">비용</a> 버튼에서 확인할 수 있습니다.</p></div>'
 
    /* 5. 유의사항 */
    + '<details class="hm-notice"><summary>이용 전 알아두실 점</summary><ul>'
@@ -2639,7 +2696,7 @@ function renderHome(){
   $("p-home").querySelectorAll(".hm-fac").forEach(b=>b.onclick=()=>{
     CUR=b.dataset.k; $("fac").value=CUR; SUB=""; LASTCALC=null; saveState(); renderAll();
     const w=$("hmWhen"); if(w) w.scrollIntoView({behavior:"smooth",block:"start"}); });
-  $("p-home").querySelectorAll("[data-go]").forEach(li=>li.onclick=()=>goTab(li.dataset.go));
+  $("p-home").querySelectorAll("[data-go]").forEach(li=>li.onclick=e=>{ e.preventDefault(); goTab(li.dataset.go); });
 }
 function goTab(p){ const b=$("nav").querySelector('button[data-p="'+p+'"]'); if(b) b.click(); }
 
@@ -2662,12 +2719,229 @@ function helpify(root){
   });
 }
 
+/* ==========================================================
+   시트 — 검사·진단 비용
+   검사수수료: 「폐기물처리시설의 검사수수료」(국립환경과학원고시 제2026-31호, 2026. 7. 27.)
+   기술진단비용: 「공공환경시설의 기술진단비용」 별표 Ⅳ(기후에너지환경부고시 제2026-114호, 2026. 5. 13.)
+   금액 단위: 천원
+   ========================================================== */
+const I_=Infinity;
+const FEE_SRC="폐기물처리시설의 검사수수료(국립환경과학원고시 제2026-31호, 2026. 7. 27. 시행)";
+const DIAG_SRC="공공환경시설의 기술진단비용 별표 Ⅳ(기후에너지환경부고시 제2026-114호, 2026. 5. 13. 시행)";
+const OPMODE=[["batch","회분식"],["semi","준연속식"],["cont","연속식"]];
+const KG3={b:[200,2000,I_],l:["200kg/h 미만","200kg/h 이상 2ton/h 미만","2ton/h 이상"]};
+const KG2={b:[200,I_],l:["200kg/h 미만","200kg/h 이상"]};
+const HEAT={설치:{batch:[null,2797],semi:[null,4214,6386],cont:[null,6998,11885]},
+            정기:{batch:[2233,2496],semi:[2376,3417,4831],cont:[3057,5136,7711]}};
+const LAND_B=[5000,10000,30000,50000,100000,500000,1000000,2000000,3000000,4000000,5000000,I_];
+const LAND={
+ 설치:{y:[5281,11859,13554,15248,17580,20415,23250,26576,30081,34490,40199,47661],n:[4019,7442,8505,9568,11375,13206,15036,17299,19425,22455,26097,30801]},
+ 정기:{y:[5851,14338,16214,17799,20589,23588,27613,31495,35016,41254,48174,57376],n:[4557,8749,9574,11349,13102,15169,17238,19986,23572,26775,31802,37023]},
+ 사용종료:{y:[7900,9433,10493,12087,13147,15740,18394,20986,23640,26233,28887,31480],n:[5780,6840,7305,8435,9433,11553,13147,15205,16800,18928,20986,22580]},
+ 사후관리:{y:[5246,6306,7305,7900,8899,10493,12551,14145,16274,17798,19392,21521],n:[3188,3652,4186,4712,5246,6306,7305,8435,9433,10493,11553,12551]}};
+const FOOD_FEE={설치:{사료화:[621,955,1657],퇴비화:[1302,1815,2712],혐기성:[846,1046,2216],기타:[520,762,1318]},
+                정기:{사료화:[513,776,1299],퇴비화:[1087,1517,2241],혐기성:[678,879,1906],기타:[434,635,1036]}};
+const FOOD_B={b:[5,50,I_],l:["5톤/일 미만","5톤/일 이상 50톤/일 미만","50톤/일 이상"]};
+/* 기술진단 기본진단비용 */
+const DG_INC={b:[500,1000,1500,2000,5000,10000,15000,20000,25000,I_],v:[16208,43403,75215,96983,135846,148621,167783,186945,206107,231657]};
+const DG_LAND={b:[20000,50000,100000,500000,I_],y:[116783,137819,157616,187333,207129],n:[77855,91879,105077,124888,138086]};
+const DG_FOOD_B=[30,50,100,150,I_];
+const DG_FOOD={사료화:[39433,49767,60101,70434,80768],퇴비화:[48368,63249,78129,93010,107890],"혐기성 소화":[56394,74168,91942,109716,127490],
+ "감량화(사료원료)":[35980,44867,53754,62641,71528],"감량화(비료원료)":[36226,45112,53999,62886,71773],부숙토:[42172,54159,66146,78133,90120],
+ 지렁이분변토:[35789,44676,53563,62450,71337],석회처리:[36294,45181,54068,62955,71842],버섯재배:[35938,44825,53712,62599,71486]};
+/* 음식물 처리방식(모의점검) → 수수료 분류 / 기술진단 분류 */
+const FOOD_MAP={사료화:["사료화","사료화"],퇴비화:["퇴비화","퇴비화"],혐기성분해:["혐기성","혐기성 소화"],감량화:["기타",null],
+ 부숙토생산:["기타","부숙토"],생석회처리:["기타","석회처리"],동애등에:["기타",null],지렁이:["기타","지렁이분변토"],버섯재배:["기타","버섯재배"]};
+const bandIdx=(b,x)=>b.findIndex(u=>x<u);
+const won=v=>v==null?"-":v.toLocaleString("ko-KR")+"천원";
+const wonLong=v=>{ const w=Math.round(v*1000), eok=Math.floor(w/1e8), man=Math.floor((w%1e8)/1e4), rest=w%1e4;
+  return ([eok?eok.toLocaleString("ko-KR")+"억":"", man?man.toLocaleString("ko-KR")+"만":"", rest?rest.toLocaleString("ko-KR"):""].filter(Boolean).join(" ")||"0")+"원"; };
+let FEEIN={};
+const wonW=v=>Math.round(v).toLocaleString("ko-KR")+"원";           // 원 단위 표시
+const vatOf=v=>Math.round(v*1000*0.1);                               // 천원 → 부가세(원)
+const withVat=v=>Math.round(v*1000)+vatOf(v);                        // 천원 → 부가세 포함(원)
+function fin(){ return FEEIN[CUR]=FEEIN[CUR]||{}; }
+
+/* ---- 여러 시설(같은 부지) 계산 ---- */
+const DG_FACTOR={incin:0.7,landfill:0.5,food:0.5};
+const DG_FACTOR_NOTE={incin:"같은 부지 2개 이상 동시 신청: 용량이 가장 큰 시설 1.0, 나머지 0.7 (비고 3)",
+  landfill:"2개소 이상 동시 신청: 매립면적이 가장 큰 시설 1.0, 나머지 0.5 (비고 4)",
+  food:"같은 부지 2개 이상 동시 신청: 용량이 가장 큰 시설 1.0, 나머지 0.5 (비고 5)"};
+const FOOD_KINDS=["사료화","퇴비화","혐기성 소화","감량화(사료원료)","감량화(비료원료)","부숙토","지렁이분변토","석회처리","버섯재배","동애등에 분변토"];
+const FOOD_FROM_SUB={사료화:"사료화",퇴비화:"퇴비화",혐기성분해:"혐기성 소화",감량화:"감량화(사료원료)",부숙토생산:"부숙토",생석회처리:"석회처리",동애등에:"동애등에 분변토",지렁이:"지렁이분변토",버섯재배:"버섯재배"};
+const feeCat=k=>k==="사료화"?"사료화":k==="퇴비화"?"퇴비화":k==="혐기성 소화"?"혐기성":"기타";
+const LBAND=["5천㎡ 미만","5천~1만㎡","1만~3만㎡","3만~5만㎡","5만~10만㎡","10만~50만㎡","50만~100만㎡","100만~200만㎡","200만~300만㎡","300만~400만㎡","400만~500만㎡","500만㎡ 이상"];
+const INC_DB=["500 미만","500~1,000","1,000~1,500","1,500~2,000","2,000~5,000","5,000~10,000","10,000~15,000","15,000~20,000","20,000~25,000","25,000 이상"];
+const INC_T={설치:{batch:[824,1038],semi:[1274,1779,3443],cont:[2471,3164,9166]},정기:{batch:[599,740],semi:[775,1170,2066],cont:[1301,1862,5521]}};
+
+function units(){
+  const F=fin(), P=prof();
+  if(!Array.isArray(F.units)||!F.units.length){
+    F.units=[{mode:F.mode||"cont",cap:F.cap||"",area:F.area||"",leach:F.leach||"y",kind:FOOD_FROM_SUB[P.sub]||"사료화"}];
+    if(P.sub==="감량화" && F.redUse==="fert") F.units[0].kind="감량화(비료원료)";
+  }
+  return F.units;
+}
+/* 시설 한 곳의 검사수수료 */
+function unitFee(u){
+  const P=prof(), F=fin(), cap=parseFloat(u.cap), area=parseFloat(u.area), r={v:{},band:"",need:"",miss:{}};
+  const kg=(m)=>{ const band=m==="batch"?KG2:KG3, i=bandIdx(band.b,cap); return {i,lab:(OPMODE.find(o=>o[0]===m)||[0,""])[1]+" · "+band.l[i]}; };
+  if(["incin","heat","pyro"].includes(CUR)){
+    if(isNaN(cap)){ r.need="처리용량"; return r; }
+    const m=u.mode||"cont", k=kg(m), T=CUR==="incin"?INC_T:HEAT;
+    ["설치","정기"].forEach(t=>{ r.v[t]=T[t][m][k.i]; if(r.v[t]==null) r.miss[t]=1; }); r.band=k.lab;
+  } else if(CUR==="cement"){
+    if(isNaN(cap)){ r.need="처리용량"; return r; }
+    const i=bandIdx(KG3.b,cap); r.v.설치=[null,4113,8904][i]; r.v.정기=[null,2327,4758][i]; r.band=KG3.l[i];
+    ["설치","정기"].forEach(t=>{ if(r.v[t]==null) r.miss[t]=1; });
+  } else if(CUR==="sterile"){
+    if(isNaN(cap)){ r.need="처리용량"; return r; }
+    const i=cap<500?0:1; r.v.설치=[692,871][i]; r.v.정기=[548,692][i]; r.band=["500kg/h 미만","500kg/h 이상"][i];
+  } else if(CUR==="landfill"){
+    if(isNaN(area)){ r.need="매립면적"; return r; }
+    const i=bandIdx(LAND_B,area), lc=u.leach||"y", blk=P.form==="blk";
+    [["설치","설치"],["정기","정기"],["사용종료","사용종료"],["사후관리","사후관리"]].forEach(([t,k])=>{
+      let v=LAND[k][lc][i]; if(blk) v*=0.5; else if(F.partial && t!=="정기") v*=0.5; r.v[t]=Math.floor(v); });
+    r.band=LBAND[i]+" · 침출수 "+(lc==="y"?"있음":"없음")+(blk?" · 차단형 50% 감액":(F.partial?" · 일부 검사 50% 감액":""));
+  } else if(CUR==="food"){
+    if(isNaN(cap)){ r.need="처리량"; return r; }
+    const i=bandIdx(FOOD_B.b,cap), c=feeCat(u.kind||"사료화");
+    r.v.설치=FOOD_FEE.설치[c][i]; r.v.정기=FOOD_FEE.정기[c][i]; r.band=(c==="기타"?"기타시설":c==="혐기성"?"혐기성 분해시설":c+"시설")+" · "+FOOD_B.l[i];
+  }
+  return r;
+}
+/* 시설 한 곳의 기본진단비용 */
+function unitDiag(u){
+  const cap=parseFloat(u.cap), area=parseFloat(u.area);
+  if(CUR==="incin"){ if(isNaN(cap)) return null; const i=bandIdx(DG_INC.b,cap); return {base:DG_INC.v[i],size:cap,band:INC_DB[i]+" kg/hr"}; }
+  if(CUR==="landfill"){ if(isNaN(area)) return null; const lc=u.leach||"y", i=bandIdx(DG_LAND.b,area);
+    return {base:DG_LAND[lc][i],size:area,band:["2만㎡ 미만","2만~5만㎡","5만~10만㎡","10만~50만㎡","50만㎡ 이상"][i]+" · 침출수 "+(lc==="y"?"보유":"미보유")}; }
+  if(CUR==="food"){ if(isNaN(cap)) return null; const k=u.kind||"사료화";
+    if(!DG_FOOD[k]) return {base:null,size:cap,band:k,none:"별표에 금액 없음 — 진단대행기관과 협의"};
+    const i=bandIdx(DG_FOOD_B,cap); return {base:DG_FOOD[k][i],size:cap,band:k+" · "+["30톤/일 미만","30~50톤/일","50~100톤/일","100~150톤/일","150톤/일 이상"][i]}; }
+  return null;
+}
+const UNIT_DESC=(u,i)=>{
+  const n="시설 "+(i+1);
+  if(CUR==="landfill") return n+(u.area?" ("+Number(u.area).toLocaleString("ko-KR")+"㎡)":"");
+  if(CUR==="food") return n+" ("+(u.kind||"사료화")+(u.cap?", "+u.cap+"톤/일":"")+")";
+  return n+(u.cap?" ("+Number(u.cap).toLocaleString("ko-KR")+"kg/h)":"");
+};
+function feeCalc(){
+  const U=units(), F=fin(), out={fees:[],diags:[],notes:[],diagNote:"",need:false};
+  U.forEach((u,i)=>{ const r=unitFee(u); if(r.need) out.need=true; out.fees.push(Object.assign({desc:UNIT_DESC(u,i)},r)); });
+  if(DG_FACTOR[CUR]){
+    const ds=U.map((u,i)=>Object.assign({desc:UNIT_DESC(u,i)},unitDiag(u)||{base:null,size:null,pending:true}));
+    const cand=ds.filter(d=>d.base!=null);
+    let main=-1, best=-1; ds.forEach((d,i)=>{ if(d.base!=null && d.size>best){ best=d.size; main=i; } });
+    ds.forEach((d,i)=>{ d.main=i===main; d.factor=(cand.length>1&&!d.main&&d.base!=null)?DG_FACTOR[CUR]:1; d.amt=d.base!=null?Math.floor(d.base*d.factor):null; });
+    out.diags=ds; out.diagTotal=ds.reduce((a,d)=>a+(d.amt||0),0); out.diagReady=cand.length>0;
+    if(CUR==="incin") out.diagNote="재가동이 불가능한 부득이한 사유(반입 정지, 전기 투입 불가 등)가 있으면 진단비용을 신청기관과 협의해 조정할 수 있습니다(비고 6).";
+  } else if(CUR==="heat"||CUR==="pyro") out.diagNote="공공환경시설 기술진단 대상(소각·매립·음식물류폐기물처리시설)에 해당하는지 감독기관에 확인하십시오.";
+  else if(CUR==="cement") out.diagNote="시멘트 소성로는 공공환경시설 기술진단 대상이 아닙니다.";
+  else if(CUR==="sterile") out.diagNote="멸균분쇄시설은 공공환경시설 기술진단 대상이 아닙니다.";
+  /* 비고 */
+  if(CUR==="incin") out.notes.push("일괄투입식 소각시설에서 성능시험시간을 넘기거나, 가스화실 2개 이상을 교대로 운전하는 경우 초과 시간만큼 수수료가 가산됩니다(비고 6).");
+  if(CUR==="heat"||CUR==="pyro"){
+    if(CUR==="pyro") out.notes.push("열분해시설은 소각열회수시설의 설치·정기검사 수수료를 준용합니다(비고 14).");
+    out.notes.push("시료 채취·분석 수가 기준(200kg/h 미만·회분식 2개, 200kg/h~2ton/h 3개, 2ton/h 이상 4개)과 다르면 수수료가 달라집니다(비고 11).");
+    out.notes.push("「에너지이용 합리화법」 검사대상기기 검사에 합격한 경우, 해당 검사항목 수수료는 삭감됩니다(비고 12).");
+  }
+  if(CUR==="landfill"){
+    out.notes.push("매립지 규모는 외부 도로·관리동·침출수처리시설 등 부대시설을 뺀 매립면적입니다(비고 1).");
+    out.notes.push("시험분석 비용과 면적·용량 측량 비용은 수수료에 포함되지 않아 별도로 부담합니다(비고 4).");
+    out.notes.push("중간검사를 받는 경우 중간검사 신청 때 수수료의 30%를 먼저 냅니다(비고 7).");
+  }
+  if(CUR==="food"){
+    out.notes.push("시험분석 비용과 측량 비용은 수수료에 포함되지 않아 별도로 부담합니다(비고 4).");
+    out.notes.push("다른 폐기물과 함께 처리하는 시설은 허가·신고 때 적은 음식물류폐기물 처리량을 기준으로 산정합니다(비고 9).");
+  }
+  if(U.length>1) out.notes.push("검사수수료는 시설마다 따로 산정합니다. 같은 부지 여러 시설에 대한 감액 규정은 기술진단비용에만 있습니다.");
+  out.notes.push("검사수수료와 기술진단비용 모두 표의 금액에 부가가치세 10%가 별도로 붙습니다.");
+  out.notes.push("수수료는 검사신청서를 낼 때 검사기관에 전액 냅니다(비고 7).");
+  out.notes.push("재검사에서 불합격 부분만 다시 검사하면 직접인건비와 출장비를 합한 금액만 냅니다(비고 5).");
+  if(F.island) out.notes.push("연륙교가 없는 섬 지역은 선박운임 등이 별도로 더해집니다(비고 8).");
+  return out;
+}
+function feeRegular(){ try{ const r=feeCalc(); const v=r.fees.map(x=>x.v.정기).filter(x=>x!=null); return v.length?v.reduce((a,b)=>a+b,0):null; }catch(e){ return null; } }
+
+function feeInputs(){
+  const U=units(), F=fin(), multiDiag=!!DG_FACTOR[CUR];
+  const sel=(cls,i,opts,val)=>'<select class="f" data-u="'+i+'" data-k="'+cls+'">'+opts.map(o=>'<option value="'+esc(o[0])+'"'+(val===o[0]?' selected':'')+'>'+esc(o[1])+'</option>').join("")+'</select>';
+  const num=(key,i,unit,val,ph)=>'<div class="numrow"><input class="f" type="number" inputmode="decimal" min="0" step="any" data-u="'+i+'" data-k="'+key+'" value="'+(val==null?"":esc(String(val)))+'" placeholder="'+ph+'"><span class="u">'+unit+'</span></div>';
+  const head = ["incin","heat","pyro"].includes(CUR)?["운전 방식","시간당 처리용량"]
+    : CUR==="landfill"?["매립면적","침출수처리시설"]
+    : CUR==="food"?["처리방식","음식물류 처리량"]:["시간당 처리용량",""];
+  const rows=U.map((u,i)=>{
+    let c1,c2;
+    if(["incin","heat","pyro"].includes(CUR)){ c1=sel("mode",i,OPMODE,u.mode||"cont"); c2=num("cap",i,"kg/h",u.cap,"예: 1250"); }
+    else if(CUR==="landfill"){ c1=num("area",i,"㎡",u.area,"예: 85000"); c2=sel("leach",i,[["y","있음"],["n","없음"]],u.leach||"y"); }
+    else if(CUR==="food"){ c1=sel("kind",i,FOOD_KINDS.map(k=>[k,k]),u.kind||"사료화"); c2=num("cap",i,"톤/일",u.cap,"예: 40"); }
+    else { c1=num("cap",i,"kg/h",u.cap,"예: 600"); c2=""; }
+    return '<tr><th>시설 '+(i+1)+'</th><td>'+c1+'</td><td>'+c2+'</td><td>'+(U.length>1?'<button class="lk fe-del" data-del="'+i+'" aria-label="시설 '+(i+1)+' 삭제">삭제</button>':'')+'</td></tr>';
+  }).join("");
+  return '<div class="rvtbl-w"><table class="fe-in"><thead><tr><th></th><th>'+head[0]+'</th><th>'+head[1]+'</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>'
+   + '<button class="btn ghost sm" id="fe_add">+ 같은 부지 시설 추가</button>'
+   + (multiDiag?'<span class="fe-hint">2개 이상이면 기술진단비용 보정률이 자동 적용됩니다.</span>':'')
+   + '<div class="fe-chk">'
+   + (CUR==="landfill"?'<label class="chk"><input type="checkbox" id="fe_partial"'+(F.partial?' checked':'')+'> 일부 시설 변경·단계별 설치로 일부 항목만 검사</label>':'')
+   + '<label class="chk"><input type="checkbox" id="fe_island"'+(F.island?' checked':'')+'> 연륙교가 없는 섬 지역</label></div>';
+}
+function renderFee(){
+  const fx=f(), P=prof(), r=feeCalc(), U=units(), multi=U.length>1;
+  const cond=(PROFILE[CUR]||[]).filter(q=>!q.when||q.when(P)).filter(q=>q.k==="form").map(q=>{ const o=q.o.find(x=>x[0]===P[q.k]); return o?q.q+": "+o[1]:""; }).filter(Boolean);
+  const types = CUR==="landfill"?[["설치","설치검사"],["정기","정기검사"],["사용종료","사용종료·폐쇄"],["사후관리","사후관리 정기"]]:[["설치","설치검사"],["정기","정기검사"]];
+  const cell=(x,t)=>x.need?'<span class="fe-na">입력 필요</span>':x.miss[t]?'<span class="fe-na">금액 없음</span>':'<b>'+won(x.v[t])+'</b>';
+  let feeHTML='<div class="rvtbl-w"><table class="fe-t2"><thead><tr><th>시설</th>'+types.map(t=>'<th class="'+(t[0]==="정기"?"hl":"")+'">'+t[1]+'</th>').join("")+'</tr></thead><tbody>'
+    + r.fees.map(x=>'<tr><td>'+esc(x.desc)+(x.band?'<span class="fe-w">'+esc(x.band)+'</span>':'')+'</td>'+types.map(t=>'<td class="'+(t[0]==="정기"?"hl":"")+'">'+cell(x,t[0])+'</td>').join("")+'</tr>').join("");
+  const tot=t=>{ const v=r.fees.map(x=>x.v[t]).filter(v=>v!=null); return v.length?v.reduce((a,b)=>a+b,0):null; };
+  const hc=t=>t==="정기"?"hl":"";
+  feeHTML+='<tr class="sum"><td>'+(multi?'공급가액 합계':'공급가액')+'</td>'+types.map(t=>{ const v=tot(t[0]); return '<td class="'+hc(t[0])+'">'+(v!=null?won(v):"-")+'</td>'; }).join("")+'</tr>'
+    +'<tr class="vat"><td>부가세(10%)</td>'+types.map(t=>{ const v=tot(t[0]); return '<td class="'+hc(t[0])+'">'+(v!=null?wonW(vatOf(v)):"-")+'</td>'; }).join("")+'</tr>'
+    +'<tr class="sum2"><td>부가세 포함</td>'+types.map(t=>{ const v=tot(t[0]); return '<td class="'+hc(t[0])+'"><b>'+(v!=null?wonW(withVat(v)):"-")+'</b></td>'; }).join("")+'</tr>';
+  feeHTML+='</tbody></table></div>';
+  const reg=feeRegular(); if(reg!=null) feeHTML+='<p class="fe-big">정기검사 수수료 '+(multi?'합계 ':'')+'<b>'+wonW(withVat(reg))+'</b><span>부가세 포함 · 공급가액 '+won(reg)+' + 부가세 '+wonW(vatOf(reg))+'</span></p>';
+  let dg;
+  if(r.diags.length){
+    dg='<div class="rvtbl-w"><table class="fe-t2"><thead><tr><th>시설</th><th>기본진단비용</th><th>보정률</th><th class="hl">진단비용</th></tr></thead><tbody>'
+     + r.diags.map(d=>'<tr><td>'+esc(d.desc)+(d.band?'<span class="fe-w">'+esc(d.band)+'</span>':'')+(d.main&&multi?'<span class="tag dt">주 시설</span>':'')+'</td>'
+        +'<td>'+(d.pending?'<span class="fe-na">입력 필요</span>':d.base==null?'<span class="fe-na">'+esc(d.none||"-")+'</span>':won(d.base))+'</td>'
+        +'<td>'+(d.base!=null?'× '+d.factor:'')+'</td><td class="hl">'+(d.amt!=null?'<b>'+won(d.amt)+'</b>':'')+'</td></tr>').join("")
+     + (r.diagReady?'<tr class="sum"><td>'+(multi?'공급가액 합계':'공급가액')+'</td><td></td><td></td><td class="hl">'+won(r.diagTotal)+'</td></tr>'
+        +'<tr class="vat"><td>부가세(10%)</td><td></td><td></td><td class="hl">'+wonW(vatOf(r.diagTotal))+'</td></tr>'
+        +'<tr class="sum2"><td>부가세 포함</td><td></td><td></td><td class="hl"><b>'+wonW(withVat(r.diagTotal))+'</b></td></tr>':'')+'</tbody></table></div>';
+    if(r.diagReady){
+      dg+='<p class="fe-big">기술진단비용 '+(multi?'합계 ':'')+'<b>'+wonW(withVat(r.diagTotal))+'</b><span>부가세 포함 · 공급가액 '+won(r.diagTotal)+' + 부가세 '+wonW(vatOf(r.diagTotal))+' ('+wonLong(withVat(r.diagTotal)/1000)+')</span></p>'; }
+    dg+=(multi?'<p class="fe-n">'+esc(DG_FACTOR_NOTE[CUR])+'</p>':'')+(r.diagNote?'<p class="fe-n">'+esc(r.diagNote)+'</p>':'')
+      +'<p class="fe-n">별표 금액은 부가가치세를 뺀 금액이며 천원 미만은 버립니다(고시 제2조제2항). 추가 진단을 요청하면 「엔지니어링사업대가의 기준」 등을 준용해 비용이 더해질 수 있습니다(비고 1).</p>';
+  } else dg='<p class="fe-na2">'+esc(r.diagNote||"해당 없음")+'</p>';
+  const cmp=(r.diagReady&&reg!=null)?'<div class="fe-cmp"><b>참고</b> 기술진단 종료일이 있는 해에는 정기검사를 받은 것으로 봅니다. 그해에 기술진단을 받을 계획이면 정기검사 수수료는 따로 내지 않습니다.</div>':'';
+  $("p-fee").innerHTML =
+    '<div class="card"><h2>검사·진단 비용 계산</h2>'
+   + '<p class="lede">'+esc(fx.name)+' 기준입니다. 같은 부지에 시설이 여러 개면 “시설 추가”로 모두 넣으면 합계가 계산됩니다.'+(CUR==="landfill"?' 관리형·차단형은 ‘사전 모의점검’의 시설 조건을 따릅니다.':'')+'</p>'
+   + (cond.length?'<div class="fe-cond">'+cond.map(c=>'<span class="tag kind">'+esc(c)+'</span>').join(" ")+'</div>':'')
+   + feeInputs()+'</div>'
+   + '<div class="card"><h2>검사수수료</h2>'+feeHTML+'<p class="fe-src">'+esc(FEE_SRC)+'</p></div>'
+   + '<div class="card"><h2>기술진단비용</h2>'+dg+'<p class="fe-src">'+esc(DIAG_SRC)+'</p></div>'
+   + cmp
+   + '<div class="card"><h2>알아 두실 점</h2><ul class="fe-notes">'+r.notes.map(n=>'<li>'+esc(n)+'</li>').join("")+'</ul>'
+   + '<p class="fe-n">검사수수료 금액은 고시의 표(그림)를 옮겨 적은 것입니다. 실제 청구 금액은 검사기관·진단대행기관의 안내를 따르십시오.</p></div>';
+  const redraw=()=>{ saveState(); renderFee(); colorHeads($("p-fee")); helpify($("p-fee")); };
+  $("p-fee").querySelectorAll("[data-u]").forEach(el=>{
+    el.onchange=()=>{ units()[+el.dataset.u][el.dataset.k]=el.value.trim(); redraw(); }; });
+  $("p-fee").querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ units().splice(+b.dataset.del,1); redraw(); });
+  $("fe_add").onclick=()=>{ const U2=units(), last=U2[U2.length-1]; U2.push({mode:last.mode,leach:last.leach,kind:last.kind,cap:"",area:""}); redraw();
+    const ins=$("p-fee").querySelectorAll('input[data-u="'+(U2.length-1)+'"]'); if(ins.length) ins[0].focus(); };
+  const pt=$("fe_partial"); if(pt) pt.onchange=()=>{ fin().partial=pt.checked; redraw(); };
+  const il=$("fe_island"); if(il) il.onchange=()=>{ fin().island=il.checked; redraw(); };
+}
+
 function renderAll(){
   ITEMS=buildItems();
   IDX=null;
-  renderHome(); renderAI(); renderSelf(); renderRev();
-  helpify($("p-ai")); helpify($("p-self"));
-  ["p-home","p-ai","p-self","p-rev"].forEach(id=>colorHeads($(id)));
+  renderHome(); renderAI(); renderSelf(); renderFee(); renderRev();
+  helpify($("p-ai")); helpify($("p-self")); helpify($("p-fee"));
+  ["p-home","p-ai","p-self","p-fee","p-rev"].forEach(id=>colorHeads($(id)));
 }
 $("fac").onchange=()=>{ CUR=$("fac").value; SUB=""; LASTCALC=null; saveState(); renderAll(); };
 $("nav").querySelectorAll("button").forEach(b=>{
@@ -2678,6 +2952,7 @@ $("nav").querySelectorAll("button").forEach(b=>{
     document.querySelectorAll("section.pane").forEach(s=>s.classList.remove("on"));
     $("p-"+b.dataset.p).classList.add("on");
     if(b.dataset.p==="rev") renderRev();
+    if(b.dataset.p==="fee"){ renderFee(); helpify($("p-fee")); colorHeads($("p-fee")); }
     window.scrollTo({top:0,behavior:"smooth"});
   };
 });
